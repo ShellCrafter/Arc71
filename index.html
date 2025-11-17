@@ -11,6 +11,7 @@
       margin: 0;
       padding: 0;
       width: 100vw;
+      height: 100vh;
       overflow-x: hidden;
     }
     * { box-sizing: border-box; }
@@ -30,9 +31,6 @@
       gap: 40px;
       border-bottom: 2px solid #ff0040;
       box-shadow: 0 0 20px #ff0040;
-      position: sticky;
-      top: 0;
-      z-index: 100;
     }
     .nav a {
       color: #ff0040;
@@ -65,7 +63,6 @@
       overflow: hidden;
       width: 0;
       animation: typing 5s steps(60, end) forwards, blink 0.75s step-end infinite;
-      margin: 0 auto;
     }
     .box {
       max-width: 800px;
@@ -93,7 +90,6 @@
       font-size: 16px;
       cursor: pointer;
       box-shadow: 0 0 10px #ff0040;
-      display: block;
     }
     .sound-button:hover {
       background: #fff;
@@ -122,440 +118,23 @@
       80% { text-shadow: 1px -1px #ff0040; }
       100% { text-shadow: 0 0 20px #ff0040; }
     }
-    
-    /* NEW STYLES FOR ADDED CONTENT */
-    .section-title {
-      font-size: 28px;
-      color: #ff0040;
-      margin: 40px 0 20px;
-      text-shadow: 0 0 10px #ff0040;
-      border-bottom: 1px solid #00ffe1;
-      padding-bottom: 10px;
-      text-align: center;
-    }
-    
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin: 30px 0;
-    }
-    
-    .service-card {
-      background: rgba(0, 0, 0, 0.7);
-      border: 1px solid #00ffe1;
-      border-radius: 8px;
-      padding: 20px;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    
-    .service-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 15px #00ffe1;
-    }
-    
-    .service-card h3 {
-      color: #ff0040;
-      margin-top: 0;
-    }
-    
-    .tools-list {
-      list-style: none;
-      padding: 0;
-      text-align: left;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    .tools-list li {
-      padding: 10px;
-      border-bottom: 1px dashed #00ffe1;
-      color: #ccffff;
-    }
-    
-    .tools-list li:before {
-      content: "➔";
-      margin-right: 10px;
-      color: #ff0040;
-    }
-    
-    .news-item {
-      text-align: left;
-      margin: 20px 0;
-      padding: 15px;
-      border-left: 3px solid #ff0040;
-      background: rgba(0, 0, 0, 0.3);
-    }
-    
-    .news-date {
-      color: #ff0040;
-      font-size: 14px;
-    }
-    
-    .contact-form {
-      display: grid;
-      gap: 15px;
-      max-width: 500px;
-      margin: 0 auto;
-      text-align: left;
-    }
-    
-    .contact-form input, 
-    .contact-form textarea {
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid #00ffe1;
-      padding: 10px;
-      color: #ccffff;
-      font-family: 'Courier New', monospace;
-      width: 100%;
-    }
-    
-    .contact-form button {
-      background: #ff0040;
-      color: #000;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #ff0040;
-      font-family: 'Courier New', monospace;
-      font-weight: bold;
-    }
-    
-    .contact-form button:hover {
-      background: #fff;
-      color: #ff0040;
-    }
-    
-    .terminal {
-      background: #000;
-      border: 2px solid #00ffe1;
-      border-radius: 5px;
-      padding: 20px;
-      margin: 30px auto;
-      max-width: 700px;
-      text-align: left;
-      box-shadow: 0 0 20px #00ffe1;
-    }
-    
-    .terminal-header {
-      background: #222;
-      margin: -20px -20px 20px;
-      padding: 10px 20px;
-      border-bottom: 1px solid #00ffe1;
-      display: flex;
-      justify-content: space-between;
-      color: #ff0040;
-    }
-    
-    .terminal-content {
-      height: 200px;
-      overflow-y: auto;
-    }
-    
-    .terminal-content p {
-      margin: 5px 0;
-      font-size: 16px;
-    }
-    
-    .terminal-input {
-      display: flex;
-      margin-top: 10px;
-    }
-    
-    .terminal-prompt {
-      color: #ff0040;
-      margin-right: 10px;
-    }
-    
-    .terminal-input input {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid #00ffe1;
-      color: #ccffff;
-      font-family: 'Courier New', monospace;
-      flex-grow: 1;
-      outline: none;
-    }
-    
-    .quote {
-      font-style: italic;
-      color: #999;
-      border-left: 3px solid #ff0040;
-      padding-left: 15px;
-      margin: 30px auto;
-      max-width: 600px;
-      text-align: left;
-    }
-    
-    .back-to-top {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: #ff0040;
-      color: #000;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      font-size: 24px;
-      box-shadow: 0 0 15px #ff0040;
-      opacity: 0;
-      transition: opacity 0.3s;
-      z-index: 99;
-    }
-    
-    .back-to-top.visible {
-      opacity: 1;
-    }
-    
-    .back-to-top:hover {
-      background: #fff;
-      color: #ff0040;
-    }
-    
-    .page {
-      display: none;
-    }
-    
-    .page.active {
-      display: block;
-    }
   </style>
 </head>
 <body>
- <div class="nav">
+  <div class="nav">
     <a href="index.html">Home</a>
     <a href="tools.html">Tools</a>
     <a href="about.html">About</a>
   </div>
 
-  <!-- HOME PAGE -->
-  <div id="home" class="page active">
-    <div class="content">
-      <h1>☠ Arc71 Portal</h1>
-      <div class="typing">Descend into the digital void. Emerge encrypted.</div>
-      <div class="box">
-        <p>Arc71 is the darknet hub for ethical hackers, cyberwarriors, and privacy insurgents.</p>
-        <p>Tools forged in darkness. Knowledge powered by encryption. Freedom delivered anonymously.</p>
-        <p>🕷 We do not forget. We do not forgive. We do not track.</p>
-        <button class="sound-button" onclick="toggleSound()">🎵 Toggle Dark Ambient</button>
-      </div>
-      
-      <!-- NEW CONTENT STARTS HERE -->
-      <h2 class="section-title">Our Services</h2>
-      <div class="services-grid">
-        <div class="service-card">
-          <h3>Digital Anonymity</h3>
-          <p>Complete identity protection services including secure communication channels, cryptocurrency mixing, and anonymous browsing solutions.</p>
-        </div>
-        <div class="service-card">
-          <h3>Penetration Testing</h3>
-          <p>Professional security assessment for your systems. We find vulnerabilities before the black hats do.</p>
-        </div>
-        <div class="service-card">
-          <h3>Forensic Analysis</h3>
-          <p>Digital forensic services to investigate breaches, analyze malware, and track digital footprints.</p>
-        </div>
-        <div class="service-card">
-          <h3>Encryption Solutions</h3>
-          <p>End-to-end encrypted communications, secure file storage, and custom encryption implementations.</p>
-        </div>
-      </div>
-      
-      <h2 class="section-title">Hacker's Toolkit</h2>
-      <div class="box">
-        <ul class="tools-list">
-          <li>TOR Network Integration Suite</li>
-          <li>Quantum-Resistant Encryption Algorithms</li>
-          <li>Zero-Day Exploit Database (Members Only)</li>
-          <li>Blockchain Anonymity Tools</li>
-          <li>Secure OS Custom Images</li>
-          <li>Network Traffic Obfuscation</li>
-          <li>Advanced Persistent Threat Simulator</li>
-          <li>Dark Web Monitoring Dashboard</li>
-        </ul>
-      </div>
-      
-      <h2 class="section-title">Underground News</h2>
-      <div class="box">
-        <div class="news-item">
-          <span class="news-date">2025-08-28:</span>
-          <p>New zero-day vulnerability discovered in major cryptocurrency exchange. Patch available to members.</p>
-        </div>
-        <div class="news-item">
-          <span class="news-date">2025-08-25:</span>
-          <p>Arc71 releases new onion routing protocol with enhanced protection against timing attacks.</p>
-        </div>
-        <div class="news-item">
-          <span class="news-date">2025-08-20:</span>
-          <p>Upcoming black hat conference cancelled due to "unforeseen circumstances". Alternative meeting being organized.</p>
-        </div>
-        <div class="news-item">
-          <span class="news-date">2025-08-15:</span>
-          <p>New legislation threatens encryption standards worldwide. Resistance being organized.</p>
-        </div>
-      </div>
-      
-      <h2 class="section-title">Live Terminal</h2>
-      <div class="terminal">
-        <div class="terminal-header">
-          <span>arc71-terminal v3.2.1</span>
-          <span>secure connection established</span>
-        </div>
-        <div class="terminal-content">
-          <p>> Initializing secure connection...</p>
-          <p>> Routing through 7 nodes across 4 jurisdictions</p>
-          <p>> Encryption: AES-256 with perfect forward secrecy</p>
-          <p>> Connection secured at 2025-08-28 23:59:47 UTC</p>
-          <p>> System status: All services operational</p>
-          <p>> Threat level: ELEVATED</p>
-          <p>> Welcome to the Arc71 network. Type 'help' for commands.</p>
-        </div>
-        <div class="terminal-input">
-          <span class="terminal-prompt">>></span>
-          <input type="text" placeholder="Type command here...">
-        </div>
-      </div>
-      
-      <div class="quote">
-        "In the age of digital surveillance, privacy isn't about having something to hide. It's about having control over your own existence. The right to encryption is the right to self-defense in the digital realm."
-      </div>
-      
-      <h2 class="section-title">Secure Contact</h2>
-      <div class="box">
-        <p>Use the form below for initial contact. For sensitive communications, use our PGP key.</p>
-        <div class="contact-form">
-          <div>
-            <label for="name">Codename</label>
-            <input type="text" id="name" placeholder="Your alias">
-          </div>
-          <div>
-            <label for="email">Contact Point</label>
-            <input type="text" id="email" placeholder="Secure method of contact">
-          </div>
-          <div>
-            <label for="message">Message</label>
-            <textarea id="message" rows="4" placeholder="Encrypted message"></textarea>
-          </div>
-          <button type="submit">Send Through Secure Channels</button>
-        </div>
-      </div>
-      
-      <div class="box">
-        <h3>PGP Public Key</h3>
-        <p style="font-size: 10px; word-break: break-all;">
-          -----BEGIN PGP PUBLIC KEY BLOCK-----<br>
-          mQENBF2l8LABCADTLb4M2+J6USnUEmt2mpx12p2nkpPOVmjx1f2fXe6sj3Kp<br>
-          ... [key truncated for display] ...<br>
-          =3j6w<br>
-          -----END PGP PUBLIC KEY BLOCK-----
-        </p>
-        <button class="sound-button" style="margin-top: 20px;">Download Full Key</button>
-      </div>
-      
-      <a href="#" class="back-to-top">↑</a>
-    </div>
-  </div>
-
-  <!-- TOOLS PAGE -->
-  <div id="tools" class="page">
-    <div class="content">
-      <h1>🛠 Arc71 Tools</h1>
-      <div class="typing">Powerful utilities for the modern cyber operative.</div>
-      
-      <div class="box">
-        <h2 class="section-title">Network Tools</h2>
-        <div class="services-grid">
-          <div class="service-card">
-            <h3>Onion Router</h3>
-            <p>Advanced TOR implementation with enhanced obfuscation and anti-censorship features.</p>
-            <button class="sound-button">Download</button>
-          </div>
-          <div class="service-card">
-            <h3>Packet Forger</h3>
-            <p>Create custom network packets for penetration testing and network analysis.</p>
-            <button class="sound-button">Download</button>
-          </div>
-          <div class="service-card">
-            <h3>Port Scanner</h3>
-            <p>Stealth port scanning utility with advanced fingerprinting evasion techniques.</p>
-            <button class="sound-button">Download</button>
-          </div>
-        </div>
-        
-        <h2 class="section-title">Cryptography</h2>
-        <div class="services-grid">
-          <div class="service-card">
-            <h3>Vortex Encryptor</h3>
-            <p>Military-grade file encryption with deniable encryption capabilities.</p>
-            <button class="sound-button">Download</button>
-          </div>
-          <div class="service-card">
-            <h3>Key Generator</h3>
-            <p>True random key generation using atmospheric noise and quantum principles.</p>
-            <button class="sound-button">Download</button>
-          </div>
-          <div class="service-card">
-            <h3>Steganography Suite</h3>
-            <p>Hide messages within images, audio files, and other digital media.</p>
-            <button class="sound-button">Download</button>
-          </div>
-        </div>
-        
-        <h2 class="section-title">Exploitation</h2>
-        <div class="services-grid">
-          <div class="service-card">
-            <h3>Vulnerability Scanner</h3>
-            <p>Comprehensive security assessment tool for networks and web applications.</p>
-            <button class="sound-button">Download</button>
-          </div>
-          <div class="service-card">
-            <h3>Payload Generator</h3>
-            <p>Create custom exploits and payloads for various architectures and platforms.</p>
-            <button class="sound-button">Download</button>
-          </div>
-          <div class="service-card">
-            <h3>Privilege Escalator</h3>
-            <p>Toolkit for identifying and exploiting privilege escalation vulnerabilities.</p>
-            <button class="sound-button">Download</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ABOUT PAGE -->
-  <div id="about" class="page">
-    <div class="content">
-      <h1>🔍 About Arc71</h1>
-      <div class="typing">Understanding our mission, ethics, and origins.</div>
-      
-      <div class="box">
-        <h2 class="section-title">Our Story</h2>
-        <p>Arc71 was founded in 2013 by a collective of cybersecurity researchers, privacy advocates, and ethical hackers who believed that digital privacy is a fundamental human right.</p>
-        <p>What began as a small community of like-minded individuals has grown into one of the most respected resources on the darknet for cybersecurity tools and knowledge.</p>
-        
-        <h2 class="section-title">Our Mission</h2>
-        <p>We believe in a future where individuals have control over their digital lives. Our mission is to develop and provide tools that empower people to protect their privacy, secure their communications, and defend against surveillance.</p>
-        <p>We operate on the principle that security knowledge should be accessible to all, not just those with resources or connections.</p>
-        
-        <h2 class="section-title">Ethics Statement</h2>
-        <p>Arc71 is committed to ethical hacking principles. We do not condone using our tools for malicious purposes, financial gain through illegal activities, or attacks against critical infrastructure.</p>
-        <p>All our tools are developed for educational purposes, security research, and defensive cybersecurity practices.</p>
-        
-        <h2 class="section-title">The Team</h2>
-        <p>Our team consists of cybersecurity professionals from around the world. For security reasons, we maintain anonymity but we're united by our commitment to digital rights and privacy.</p>
-        <p>We include cryptographers, network engineers, software developers, and security researchers who contribute to the project.</p>
-        
-        <div class="quote">
-          "Arc71 stands as a beacon in the darkness—not to illuminate those who wish to hide, but to ensure that everyone has the right to shadows when they need them."
-        </div>
-      </div>
+  <div class="content">
+    <h1>☠ Arc71 Portal</h1>
+    <div class="typing">Descend into the digital void. Emerge encrypted.</div>
+    <div class="box">
+      <p>Arc71 is the darknet hub for ethical hackers, cyberwarriors, and privacy insurgents.</p>
+      <p>Tools forged in darkness. Knowledge powered by encryption. Freedom delivered anonymously.</p>
+      <p>🕷 We do not forget. We do not forgive. We do not track.</p>
+      <button class="sound-button" onclick="toggleSound()">🎵 Toggle Dark Ambient</button>
     </div>
   </div>
 
@@ -564,101 +143,18 @@
     Operating deep below the surface...
   </footer>
 
-  <audio id="bgmusic" loop>
-    <source src="https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3" type="audio/mpeg">
+  <audio id="bgmusic" loop autoplay>
+    <source src="investigating-shadows-dark-ambient-258067.mp3" type="audio/mpeg">
   </audio>
   <script>
     const bgmusic = document.getElementById('bgmusic');
-    let isPlaying = false;
-    
-    
-    function showPage(pageId) {
-      // Hide all pages
-      document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-      });
-      
-      // Show selected page
-      document.getElementById(pageId).classList.add('active');
-      
-      // Scroll to top
-      window.scrollTo(0, 0);
-    }
-    
-    // Back to top button functionality
-    const backToTopButton = document.querySelector('.back-to-top');
-    
-    window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 300) {
-        backToTopButton.classList.add('visible');
-      } else {
-        backToTopButton.classList.remove('visible');
-      }
-    });
-    
-    backToTopButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    let isPlaying = true;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      bgmusic.volume = 0.6;
+      bgmusic.play().catch(() => {});
     });
 
-    // Terminal input functionality
-    const terminalInput = document.querySelector('.terminal-input input');
-    const terminalContent = document.querySelector('.terminal-content');
-    
-    if (terminalInput) {
-      terminalInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          const command = terminalInput.value;
-          terminalInput.value = '';
-          
-          // Add the command to terminal
-          addTerminalLine(`>> ${command}`);
-          
-          // Process command
-          processCommand(command);
-        }
-      });
-    }
-    
-    function addTerminalLine(text) {
-      const p = document.createElement('p');
-      p.textContent = text;
-      terminalContent.appendChild(p);
-      terminalContent.scrollTop = terminalContent.scrollHeight;
-    }
-    
-    function processCommand(command) {
-      command = command.toLowerCase();
-      
-      if (command === 'help') {
-        addTerminalLine('Available commands: help, status, connect, clear, whois');
-      } else if (command === 'status') {
-        addTerminalLine('System status: All services operational');
-        addTerminalLine('Network security: MAXIMUM');
-        addTerminalLine('Threat level: ELEVATED');
-      } else if (command === 'connect') {
-        addTerminalLine('Initiating secure connection to mainframe...');
-        addTerminalLine('Connection established. Welcome to Arc71 core.');
-      } else if (command === 'clear') {
-        terminalContent.innerHTML = '';
-        addTerminalLine('Terminal cleared. Type "help" for commands.');
-      } else if (command === 'whois') {
-        addTerminalLine('Arc71: Cybersecurity collective established 2013');
-        addTerminalLine('Mission: Protecting digital rights through encryption and education');
-      } else {
-        addTerminalLine(`Command not recognized: ${command}. Type "help" for commands.`);
-      }
-    }
-
-    // Initialize with some terminal text
-    setTimeout(() => {
-      if (terminalContent) {
-        addTerminalLine('> System initialized successfully');
-        addTerminalLine('> Type "help" for commands');
-      }
-    }, 1000);
-    
-    // Toggle sound function
     function toggleSound() {
       if (isPlaying) {
         bgmusic.pause();

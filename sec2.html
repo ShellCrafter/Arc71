@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hash Crafter — Scary & Neon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-rgb: 13,0,26;
+      --bg-color: rgb(13,0,26);
+      --text-color: #e0b3ff;
+      --accent: #8000ff;
+      --hover: #a64dff;
+      --shadow: #cc66ff;
+    }
+    body.green-mode {
+      --bg-rgb: 0,26,13;
+      --bg-color: rgb(0,26,13);
+      --text-color: #b3ffe0;
+      --accent: #00ff80;
+      --hover: #4dffa6;
+      --shadow: #66ffcc;
+    }
+
+    /* full-screen matrix canvas */
+    #matrix {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -2;
+      background: var(--bg-color);
+    }
+
+    /* CRT scan-lines */
+    body::before {
+      content: '';
+      pointer-events: none;
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 100% 2px;
+      z-index: -1;
+    }
+
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      overflow-x: hidden;
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+
+    /* Intro logo */
+    .intro {
+      position: fixed; top:0; left:0;
+      width:100%; height:100%;
+      display:flex; align-items:center; justify-content:center;
+      background: var(--bg-color);
+      z-index: 999;
+      animation: fadeOut 4s ease-out forwards;
+      animation-delay: 3s;
+    }
+    .intro h1 {
+      font-size: 4rem;
+      color: var(--accent);
+      text-shadow: 0 0 15px var(--shadow);
+      animation: glitch 1.5s infinite;
+    }
+    @keyframes glitch {
+      0%   { transform: translate(0,0); }
+      20%  { transform: translate(-3px,2px); }
+      40%  { transform: translate(3px,-2px); }
+      60%  { transform: translate(-1px,1px); }
+      80%  { transform: translate(1px,-1px); }
+      100% { transform: translate(0,0); }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* Header with flicker glow */
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: linear-gradient(to right, var(--accent), var(--bg-color));
+      box-shadow: 0 0 30px var(--accent);
+      position: relative;
+      z-index: 10;
+      animation: fadeIn 2s ease-out forwards;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 3rem;
+      text-shadow: 0 0 15px var(--shadow);
+      animation: glow 1.2s infinite alternate ease-in-out;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px var(--shadow); }
+      to   { text-shadow: 0 0 30px var(--shadow); }
+    }
+    header p {
+      margin: 0.5rem 0 0;
+      font-size: 1.2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid var(--text-color);
+      animation: typing 3s steps(30,end) forwards;
+      width: 0;
+    }
+    @keyframes typing {
+      to { width: 100%; }
+    }
+
+    /* Floating container */
+    .container {
+      max-width: 700px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: rgba(var(--bg-rgb),0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      box-shadow:
+        0 0 30px var(--accent),
+        inset 0 0 20px var(--accent);
+      position: relative;
+      z-index: 10;
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%     { transform: translateY(-10px); }
+    }
+
+    label, select, input, button {
+      display: block;
+      width: 100%;
+      margin: 1rem 0;
+      font-size: 1rem;
+      padding: 0.75rem;
+      border-radius: 6px;
+      border: none;
+      background: rgba(41,0,51,0.9);
+      color: var(--text-color);
+    }
+    button {
+      background: var(--accent);
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    button:hover {
+      background: var(--hover);
+      box-shadow: 0 0 15px var(--shadow);
+    }
+
+    .actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .spinner {
+      margin: 1rem auto;
+      width: 30px; height: 30px;
+      border: 4px solid rgba(41,0,51,0.9);
+      border-top: 4px solid var(--text-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .output {
+      background: rgba(51,0,64,0.9);
+      padding: 1rem;
+      border-radius: 6px;
+      box-shadow: inset 0 0 15px var(--accent);
+      word-break: break-word;
+      min-height: 2em;
+    }
+
+    .toggle-mode { text-align: center; margin-top: 1.5rem; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="matrix"></canvas>
+
+  <div class="intro">
+    <h1>🕷️ Hash Crafter</h1>
+  </div>
+
+  <header>
+    <h1>🕷️ Hash Crafter</h1>
+    <p>Generating cryptographic shadows…</p>
+  </header>
+
+  <div class="container">
+    <label for="inputText">Enter your text:</label>
+    <input id="inputText" placeholder="Type your secret incantation…" />
+
+    <label for="algorithm">Choose algorithm:</label>
+    <select id="algorithm">
+      <option value="sha512">SHA-512</option>
+      <option value="bcrypt">Bcrypt</option>
+      <option value="argon2">Argon2</option>
+    </select>
+
+    <div class="actions">
+      <button onclick="generateHash()">Craft Hash</button>
+      <button onclick="copyHash()">📋 Copy Hash</button>
+    </div>
+
+    <div id="spinner" class="spinner"></div>
+    <div id="outputHash" class="output">Awaiting your sacrifice…</div>
+
+    <hr style="border-color: var(--accent);" />
+
+    <label for="compareHash">Compare with hash:</label>
+    <input id="compareHash" placeholder="Paste a hash to compare…" />
+    <button onclick="compareHash()">🔐 Compare</button>
+    <div id="compareResult" class="output"></div>
+
+    <div class="toggle-mode">
+      <button onclick="toggleMode()">🌗 Toggle Theme</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/argon2-browser/dist/argon2.min.js"></script>
+  <script>
+    // MATRIX RAIN
+    (function(){
+      const canvas = document.getElementById('matrix'),
+            ctx    = canvas.getContext('2d'),
+            chars  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%'.split('');
+      let cols, rows, drops;
+
+      function resize(){
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        cols = Math.floor(canvas.width / 20);
+        rows = Math.floor(canvas.height / 20);
+        drops = Array(cols).fill(1);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function draw(){
+        // fade old
+        ctx.fillStyle = 'rgba(0,0,0,0.05)';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        // accent color
+        const accent = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+
+        ctx.fillStyle = accent;
+        ctx.font = '16px Orbitron';
+
+        for(let i=0; i<cols; i++){
+          const text = chars[Math.floor(Math.random() * chars.length)];
+          const x = i * 20;
+          const y = drops[i] * 20;
+          ctx.fillText(text, x, y);
+
+          if(y > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+      setInterval(draw, 50);
+    })();
+
+    // HASH LOGIC
+    let lastText='', lastAlgo='', lastHash='';
+
+    async function generateHash(){
+      const text = document.getElementById('inputText').value;
+      const algo = document.getElementById('algorithm').value;
+      const out  = document.getElementById('outputHash');
+      const sp   = document.getElementById('spinner');
+
+      out.textContent = '';
+      sp.style.display = 'block';
+
+      if(!text){
+        sp.style.display = 'none';
+        return out.textContent = 'You must whisper something first…';
+      }
+
+      lastText = text; lastAlgo = algo;
+      try {
+        if(algo==='sha512'){
+          const buf = await crypto.subtle.digest('SHA-512', new TextEncoder().encode(text));
+          lastHash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+        }
+        else if(algo==='bcrypt'){
+          const salt = bcrypt.genSaltSync(12);
+          lastHash = bcrypt.hashSync(text, salt);
+        }
+        else {
+          const res = await argon2.hash({
+            pass: text,
+            salt: 'somesaltyvalue',
+            time: 3,
+            mem: 2048,
+            hashLen: 32,
+            parallelism: 1,
+            type: argon2.ArgonType.Argon2id
+          });
+          lastHash = res.encoded;
+        }
+        out.textContent = lastHash;
+      } catch(e){
+        out.textContent = 'Error: ' + e.message;
+      } finally {
+        sp.style.display = 'none';
+      }
+    }
+
+    function copyHash(){
+      if(!lastHash) return alert('No hash to copy!');
+      navigator.clipboard.writeText(lastHash).then(
+        ()=> alert('🔗 Hash copied!'),
+        ()=> alert('❌ Copy failed.')
+      );
+    }
+
+    function compareHash(){
+      const input = document.getElementById('compareHash').value.trim();
+      const res   = document.getElementById('compareResult');
+      res.textContent = '';
+      if(!lastText || !lastHash) return res.textContent = '🔮 Generate a hash first.';
+      if(!input) return res.textContent = '⚠️ Paste a hash to compare.';
+
+      if(lastAlgo==='sha512'){
+        return res.textContent = input === lastHash
+          ? '✔️ Match!'
+          : '❌ Not a match.';
+      }
+      if(lastAlgo==='bcrypt'){
+        return res.textContent = bcrypt.compareSync(lastText, input)
+          ? '✔️ Match!'
+          : '❌ Not a match.';
+      }
+      // Argon2
+      argon2.verify({ pass: lastText, encoded: input })
+        .then(ok => res.textContent = ok ? '✔️ Match!' : '❌ Not a match.')
+        .catch(() => res.textContent = '⚠️ Invalid Argon2 hash.');
+    }
+
+    function toggleMode(){
+      document.body.classList.toggle('green-mode');
+    }
+  </script>
+
+</body>
+</html>

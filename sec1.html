@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>☠ DEEP WEB IP TRACKER v4.20 ☠</title>
+  <style>
+    :root {
+      --blood-red: #ff0033;
+      --neon-green: #00ff41;
+      --neon-blue: #00f7ff;
+      --dark-bg: #0a0a0a;
+      --terminal-text: #e6e6e6;
+      --glow-intensity: 0.8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      background: var(--dark-bg);
+      font-family: 'Courier New', monospace;
+      color: var(--terminal-text);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* Matrix rain background */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="1" height="1" fill="%2300ff4140"/></svg>');
+      opacity: 0.15;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    /* Scanner lines effect */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 255, 65, 0.05) 50%,
+        transparent 100%
+      );
+      background-size: 100% 8px;
+      animation: scanline 8s linear infinite;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    @keyframes scanline {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 100%; }
+    }
+
+    /* Main container */
+    .container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Header with glow effect only */
+    .main-header {
+      font-size: 5rem;
+      color: var(--blood-red);
+      text-shadow:
+        0 0 10px var(--blood-red),
+        0 0 20px var(--blood-red),
+        0 0 30px var(--blood-red),
+        0 0 40px #ff0000;
+      position: relative;
+      margin: 3rem 0;
+      letter-spacing: -3px;
+      text-align: center;
+    }
+
+    /* Main tracking panel */
+    .tracker-panel {
+      background: rgba(5, 5, 5, 0.85);
+      border: 1px solid var(--blood-red);
+      border-radius: 0;
+      box-shadow: 
+        0 0 30px rgba(255, 0, 51, 0.5),
+        inset 0 0 20px rgba(255, 0, 51, 0.3);
+      padding: 3rem;
+      width: 90%;
+      max-width: 1200px;
+      margin-bottom: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tracker-panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(90deg, transparent 0%, rgba(0, 255, 65, 0.1) 50%, transparent 100%);
+      animation: pan-overlay 15s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes pan-overlay {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--blood-red);
+    }
+
+    .panel-title {
+      font-size: 2.5rem;
+      color: var(--neon-green);
+      text-shadow: 0 0 10px var(--neon-green);
+      letter-spacing: 2px;
+    }
+
+    .panel-subtitle {
+      font-size: 1.2rem;
+      color: #aaa;
+      margin-bottom: 2rem;
+    }
+
+    /* Input section */
+    .input-section {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .ip-input {
+      flex: 1;
+      background: rgba(10, 10, 10, 0.8);
+      border: 1px solid var(--neon-blue);
+      color: var(--terminal-text);
+      font-size: 1.2rem;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      box-shadow: 
+        0 0 10px rgba(0, 247, 255, 0.3),
+        inset 0 0 5px rgba(0, 247, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .ip-input:focus {
+      outline: none;
+      border-color: var(--neon-green);
+      box-shadow: 
+        0 0 15px rgba(0, 255, 65, 0.5),
+        inset 0 0 10px rgba(0, 255, 65, 0.3);
+    }
+
+    .btn-track {
+      background: linear-gradient(135deg, #ff0033 0%, #cc0022 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 
+        0 0 15px rgba(255, 0, 51, 0.7),
+        0 5px 0 rgba(204, 0, 34, 0.5);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-track:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 0 20px rgba(255, 0, 51, 0.9),
+        0 8px 0 rgba(204, 0, 34, 0.5);
+    }
+
+    .btn-track:active {
+      transform: translateY(2px);
+      box-shadow: 
+        0 0 10px rgba(255, 0, 51, 0.7),
+        0 3px 0 rgba(204, 0, 34, 0.5);
+    }
+
+    .btn-track::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(30deg);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%) rotate(30deg); }
+      100% { transform: translateX(100%) rotate(30deg); }
+    }
+
+    /* Status display */
+    .status-display {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid var(--neon-green);
+      padding: 2rem;
+      margin-bottom: 3rem;
+      position: relative;
+      min-height: 200px;
+      box-shadow: 
+        inset 0 0 20px rgba(0, 255, 65, 0.2),
+        0 0 20px rgba(0, 255, 65, 0.1);
+    }
+
+    .status-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      color: var(--neon-blue);
+      font-size: 1.3rem;
+      text-shadow: 0 0 5px var(--neon-blue);
+    }
+
+    .status-content {
+      font-family: 'Courier New', monospace;
+      line-height: 1.6;
+      color: #ccc;
+    }
+
+    .status-line {
+      margin-bottom: 0.5rem;
+      display: flex;
+    }
+
+    .status-prompt {
+      color: var(--neon-green);
+      margin-right: 0.5rem;
+    }
+
+    .status-text {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      animation: typing 3s steps(40, end);
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    .blink {
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Results section */
+    .results-section {
+      display: none;
+      margin-top: 3rem;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .result-card {
+      background: rgba(10, 10, 10, 0.8);
+      border: 1px solid var(--neon-blue);
+      padding: 1.5rem;
+      box-shadow: 
+        0 0 15px rgba(0, 247, 255, 0.2),
+        inset 0 0 10px rgba(0, 247, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .result-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 5px 20px rgba(0, 247, 255, 0.4),
+        inset 0 0 15px rgba(0, 247, 255, 0.2);
+    }
+
+    .result-title {
+      color: var(--neon-green);
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 5px var(--neon-green);
+    }
+
+    .result-value {
+      font-size: 1.1rem;
+      color: #ddd;
+      word-break: break-all;
+    }
+
+    /* Map container */
+    .map-container {
+      height: 400px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid var(--blood-red);
+      margin-top: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(135deg, rgba(255, 0, 51, 0.1) 0%, transparent 100%),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="%2300ff4120" stroke-width="1"/></svg>');
+      pointer-events: none;
+    }
+
+    /* Footer */
+    .main-footer {
+      width: 100%;
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: auto;
+      position: relative;
+    }
+
+    .main-footer::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--blood-red) 50%, transparent 100%);
+    }
+
+    /* Additional scary elements */
+    .warning-box {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid var(--blood-red);
+      padding: 1.5rem;
+      margin: 3rem 0;
+      position: relative;
+    }
+
+    .warning-box::before {
+      content: "⚠ WARNING ⚠";
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: var(--dark-bg);
+      padding: 0 10px;
+      color: var(--blood-red);
+      font-weight: bold;
+      text-shadow: 0 0 5px var(--blood-red);
+    }
+
+    .scary-message {
+      position: fixed;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 0, 0, 0.9);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      font-size: 1.5rem;
+      z-index: 1000;
+      transition: bottom 0.5s ease;
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
+    }
+
+    .scary-message.show {
+      bottom: 0;
+    }
+
+    /* Terminal-like elements */
+    .terminal {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--neon-green);
+      padding: 1.5rem;
+      font-family: 'Courier New', monospace;
+      line-height: 1.6;
+      margin: 2rem 0;
+      position: relative;
+      box-shadow: 
+        inset 0 0 10px rgba(0, 255, 65, 0.3),
+        0 0 20px rgba(0, 255, 65, 0.1);
+    }
+
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--neon-green);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--neon-green);
+    }
+
+    .terminal-body {
+      color: #ccc;
+    }
+
+    .terminal-line {
+      margin-bottom: 0.5rem;
+    }
+
+    .terminal-prompt {
+      color: var(--neon-green);
+      margin-right: 0.5rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .main-header {
+        font-size: 3rem;
+      }
+      
+      .panel-title {
+        font-size: 1.8rem;
+      }
+      
+      .input-section {
+        flex-direction: column;
+      }
+      
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Hacker animation */
+    .hacker-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: var(--neon-green);
+      font-size: 1.2rem;
+      line-height: 1.6;
+      padding: 2rem;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .hacker-animation.show {
+      opacity: 1;
+    }
+
+    .hacker-text {
+      max-width: 800px;
+      margin-bottom: 2rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      max-width: 500px;
+      height: 10px;
+      background: rgba(0, 255, 65, 0.2);
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-bar::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0;
+      background: var(--neon-green);
+      animation: progress 3s linear forwards;
+    }
+
+    @keyframes progress {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+
+    /* Your IP Tracker Styles */
+    #ip-tracker {
+      background: rgba(17, 17, 17, 0.9);
+      color: var(--neon-green);
+      padding: 20px;
+      border: 2px solid var(--neon-green);
+      border-radius: 8px;
+      margin-top: 20px;
+      width: 90%;
+      max-width: 1200px;
+      box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+    }
+
+    #ip-tracker button {
+      padding: 10px 20px;
+      background: var(--neon-green);
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #ip-tracker button:hover {
+      background: #00cc33;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 255, 65, 0.5);
+    }
+
+    #ip-result {
+      margin-top: 20px;
+      font-family: monospace;
+      color: #ddd;
+    }
+
+    #ip-result p {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    #ip-result strong {
+      color: var(--neon-blue);
+    }
+  </style>
+</head>
+<body>
+  <!-- Hacker animation overlay -->
+  <div class="hacker-animation" id="hackerAnimation">
+    <div class="hacker-text">
+      <p>> INITIALIZING DARK WEB CONNECTION...</p>
+      <p>> BYPASSING FIREWALLS...</p>
+      <p>> ACCESSING TOR NETWORK...</p>
+      <p>> ESTABLISHING SECURE CHANNEL...</p>
+      <p>> CONNECTING TO I2P NODES...</p>
+      <p>> ENCRYPTING DATA STREAM...</p>
+      <p>> IP TRACKER v4.20 ONLINE</p>
+    </div>
+    <div class="progress-bar"></div>
+  </div>
+
+  <!-- Scary message that pops up -->
+  <div class="scary-message" id="scaryMessage">
+    WARNING: YOUR IP HAS BEEN LOGGED. PROCEED WITH CAUTION.
+  </div>
+
+  <div class="container">
+    <h1 class="main-header">☠ DEEP WEB IP TRACKER ☠</h1>
+
+    <div class="tracker-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">>> IP TRACKING INTERFACE</h2>
+        <div class="panel-status">STATUS: <span style="color: var(--neon-green);">ACTIVE</span></div>
+      </div>
+      
+      <p class="panel-subtitle">ENTER TARGET IP ADDRESS TO INITIATE TRACKING SEQUENCE</p>
+      
+      <div class="input-section">
+        <input type="text" class="ip-input" placeholder="Enter IP address (e.g., 192.168.1.1)" id="ipInput">
+        <button class="btn-track" id="trackButton">TRACE IP</button>
+      </div>
+      
+      <div class="status-display">
+        <div class="status-header">
+          <span>> TRACKING TERMINAL</span>
+          <span>v4.20</span>
+        </div>
+        <div class="status-content" id="statusContent">
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text">SYSTEM READY. AWAITING INPUT...</span>
+          </div>
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text">CONNECTION TO DARKNET: <span style="color: var(--neon-green);">SECURE</span></span>
+          </div>
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text">ANONYMITY STATUS: <span style="color: var(--neon-green);">ACTIVE</span></span>
+          </div>
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text">LAST SCAN: <span style="color: #ff5555;">N/A</span></span>
+          </div>
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text blink">_</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="warning-box">
+        <p>WARNING: UNAUTHORIZED USE OF THIS TOOL MAY VIOLATE INTERNATIONAL CYBER LAWS. ALL ACTIVITIES ARE LOGGED AND MAY BE REPORTED TO AUTHORITIES. USE AT YOUR OWN RISK.</p>
+      </div>
+
+      <!-- Your IP Tracker Integration -->
+      <div id="ip-tracker">
+        <button onclick="trackIP()">Track My IP</button>
+        <div id="ip-result"></div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-header">
+          <span>> SYSTEM LOG</span>
+          <span>ADMIN ACCESS</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line">
+            <span class="terminal-prompt">></span>
+            <span>Initializing secure connection...</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-prompt">></span>
+            <span>Bypassing firewall restrictions...</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-prompt">></span>
+            <span>Accessing global IP database...</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-prompt">></span>
+            <span>Establishing VPN tunnels...</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-prompt">></span>
+            <span>Ready for target acquisition...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-section" id="resultsSection">
+        <h3 style="color: var(--neon-blue); font-size: 1.8rem; margin-bottom: 1rem; text-shadow: 0 0 8px var(--neon-blue);">>> TARGET INFORMATION</h3>
+        
+        <div class="results-grid">
+          <div class="result-card">
+            <h4 class="result-title">IP ADDRESS</h4>
+            <p class="result-value" id="ipAddress">192.168.1.1</p>
+          </div>
+          <div class="result-card">
+            <h4 class="result-title">LOCATION</h4>
+            <p class="result-value" id="location">Unknown</p>
+          </div>
+          <div class="result-card">
+            <h4 class="result-title">ISP</h4>
+            <p class="result-value" id="isp">Unknown Provider</p>
+          </div>
+          <div class="result-card">
+            <h4 class="result-title">HOSTNAME</h4>
+            <p class="result-value" id="hostname">Unknown</p>
+          </div>
+          <div class="result-card">
+            <h4 class="result-title">COORDINATES</h4>
+            <p class="result-value" id="coordinates">0.0000, 0.0000</p>
+          </div>
+          <div class="result-card">
+            <h4 class="result-title">THREAT LEVEL</h4>
+            <p class="result-value" id="threatLevel">UNKNOWN</p>
+          </div>
+        </div>
+
+        <div class="map-container">
+          <div class="map-overlay"></div>
+          <!-- Map would go here in a real implementation -->
+          <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: #555;">
+            MAP DISPLAY AREA (ACTIVE IN PREMIUM VERSION)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="terminal" style="width: 90%; max-width: 1200px;">
+      <div class="terminal-header">
+        <span>> CONNECTION STATISTICS</span>
+        <span>REAL-TIME</span>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="terminal-prompt">></span>
+          <span>ACTIVE TOR NODES: <span style="color: var(--neon-green);">6</span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="terminal-prompt">></span>
+          <span>DATA ENCRYPTION: <span style="color: var(--neon-green);">AES-256</span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="terminal-prompt">></span>
+          <span>PACKETS ROUTED: <span style="color: var(--neon-blue);">1,427</span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="terminal-prompt">></span>
+          <span>LAST SCAN DURATION: <span style="color: #ff5555;">N/A</span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="terminal-prompt">></span>
+          <span>SYSTEM UPTIME: <span style="color: var(--neon-blue);">00:12:47</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="main-footer">
+    © 2025 DARKNET SERVICES | THIS INTERFACE IS MONITORED | ALL ACTIVITIES LOGGED
+    <br><br>
+    <span style="font-size: 0.7rem; color: #333;">v4.20.69 - TOR-ENABLED - I2P INTEGRATED</span>
+  </footer>
+
+  <script>
+    // Show hacker animation on load
+    window.addEventListener('load', function() {
+      const hackerAnimation = document.getElementById('hackerAnimation');
+      hackerAnimation.classList.add('show');
+      
+      // Hide after animation completes
+      setTimeout(() => {
+        hackerAnimation.classList.remove('show');
+      }, 3000);
+    });
+
+    // Track button functionality
+    document.getElementById('trackButton').addEventListener('click', function() {
+      const ipInput = document.getElementById('ipInput').value;
+      const statusContent = document.getElementById('statusContent');
+      const resultsSection = document.getElementById('resultsSection');
+      const scaryMessage = document.getElementById('scaryMessage');
+      
+      if (!ipInput) {
+        // Add error message to status
+        const errorLine = document.createElement('div');
+        errorLine.className = 'status-line';
+        errorLine.innerHTML = '<span class="status-prompt">></span><span class="status-text" style="color: #ff5555;">ERROR: NO IP ADDRESS PROVIDED</span>';
+        statusContent.appendChild(errorLine);
+        return;
+      }
+      
+      // Show hacker animation
+      const hackerAnimation = document.getElementById('hackerAnimation');
+      hackerAnimation.classList.add('show');
+      
+      // Simulate tracking process
+      setTimeout(() => {
+        hackerAnimation.classList.remove('show');
+        
+        // Update status
+        statusContent.innerHTML = `
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text">INITIATING TRACKING SEQUENCE FOR: <span style="color: var(--neon-blue);">${ipInput}</span></span>
+          </div>
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text">CONNECTING TO TOR NETWORK... <span style="color: var(--neon-green);">DONE</span></span>
+          </div>
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text">QUERYING GLOBAL IP DATABASE... <span style="color: var(--neon-green);">DONE</span></span>
+          </div>
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text">ANALYZING NETWORK SIGNATURE... <span style="color: var(--neon-green);">DONE</span></span>
+          </div>
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text">GEOLOCATING TARGET... <span style="color: var(--neon-green);">DONE</span></span>
+          </div>
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text">COMPILING REPORT... <span style="color: var(--neon-green);">DONE</span></span>
+          </div>
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text">TRACKING COMPLETE. RESULTS BELOW.</span>
+          </div>
+          <div class="status-line">
+            <span class="status-prompt">></span>
+            <span class="status-text blink">_</span>
+          </div>
+        `;
+        
+        // Show results
+        resultsSection.style.display = 'block';
+        
+        // Update results with mock data
+        document.getElementById('ipAddress').textContent = ipInput;
+        document.getElementById('location').textContent = 'Unknown Location';
+        document.getElementById('isp').textContent = 'Unknown ISP';
+        document.getElementById('hostname').textContent = 'host-' + Math.floor(Math.random() * 10000) + '.net';
+        document.getElementById('coordinates').textContent = 
+          (Math.random() * 180 - 90).toFixed(4) + ', ' + (Math.random() * 360 - 180).toFixed(4);
+        document.getElementById('threatLevel').textContent = 
+          ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'][Math.floor(Math.random() * 4)];
+        
+        // Show scary message after delay
+        setTimeout(() => {
+          scaryMessage.classList.add('show');
+          
+          // Hide after 5 seconds
+          setTimeout(() => {
+            scaryMessage.classList.remove('show');
+          }, 5000);
+        }, 2000);
+      }, 3000);
+    });
+
+    // Add typing effect to status lines
+    function typeWriter(element, text, speed) {
+      let i = 0;
+      element.textContent = '';
+      
+      function typing() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(typing, speed);
+        }
+      }
+      
+      typing();
+    }
+
+    // Apply typing effect to initial status lines
+    document.addEventListener('DOMContentLoaded', function() {
+      const statusLines = document.querySelectorAll('.status-text');
+      statusLines.forEach((line, index) => {
+        if (line.textContent.trim()) {
+          const text = line.textContent;
+          line.textContent = '';
+          setTimeout(() => {
+            typeWriter(line, text, 20 + (index * 10));
+          }, 500 + (index * 300));
+        }
+      });
+    });
+
+    // Your IP Tracker Function
+    function trackIP() {
+      fetch("http://ip-api.com/json/")
+        .then(res => res.json())
+        .then(data => {
+          const output = `
+            <p><strong>IP:</strong> ${data.query}</p>
+            <p><strong>Country:</strong> ${data.country}</p>
+            <p><strong>Region:</strong> ${data.regionName}</p>
+            <p><strong>City:</strong> ${data.city}</p>
+            <p><strong>ZIP:</strong> ${data.zip}</p>
+            <p><strong>ISP:</strong> ${data.isp}</p>
+            <p><strong>Org:</strong> ${data.org}</p>
+          `;
+          document.getElementById("ip-result").innerHTML = output;
+        })
+        .catch(err => {
+          document.getElementById("ip-result").innerHTML = "<p style='color:red;'>Error fetching IP info.</p>";
+        });
+    }
+  </script>
+</body>
+</html>
