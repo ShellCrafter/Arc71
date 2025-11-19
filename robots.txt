@@ -1,0 +1,7 @@
+User-agent: AhmiaBot
+Disallow:
+
+User-agent: *
+Disallow:
+
+Sitemap: http://tufc6idbnhpls4esctj5sn6rhbjcbnxu7ohv34c4xsqzquqakn4wcyad.onion/sitemap.xml

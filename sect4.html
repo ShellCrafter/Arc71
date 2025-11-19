@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SIHR: The Veil of Whispers — Dummy Ritual Archive</title>
+<meta name="description" content="A fictional, atmospheric dark web page about sihr (black magic). Entertainment only. No real ritual steps.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' blob: data:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self' data:;">
+<link rel="preload" as="image" href="/ritual-bg.jpg">
+<style>
+  :root{
+    --ink:#0a0a0a; --crimson:#b1002f; --blood:#ff0033; --cyan:#00ffe1; --mist:#c8f6ff;
+    --ink2:#0f0f0f; --glow:#7a0020; --shadow:#14000a; --warn:#ffea00;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;color:#e8e8e8;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace}
+  /* Background layers */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:-3;
+    background:
+      radial-gradient(1800px 800px at 20% -10%, rgba(255,0,64,.12), transparent 60%),
+      radial-gradient(1200px 600px at 80% 110%, rgba(0,255,225,.08), transparent 60%),
+      linear-gradient(180deg, #000 0%, #090909 35%, #000 100%);
+    filter: saturate(110%);
+  }
+  /* Optional photo background if /ritual-bg.jpg exists */
+  .bg-photo{position:fixed; inset:0; z-index:-4; background:#000 url('/ritual-bg.jpg') center/cover no-repeat; opacity:.14; mix-blend-mode:screen; pointer-events:none}
+  /* Floating particulates */
+  .dust{position:fixed; inset:0; z-index:-2; pointer-events:none;}
+  .spark{position:absolute; width:2px; height:2px; background:rgba(255,255,255,.7); border-radius:50%;
+         animation: float 14s linear infinite; filter: drop-shadow(0 0 6px rgba(255,255,255,.5))}
+  @keyframes float{
+    0%{transform: translateY(100vh) translateX(0)}
+    100%{transform: translateY(-10vh) translateX(50vw)}
+  }
+  /* Header/Nav */
+  header{position:sticky; top:0; background:rgba(0,0,0,.6); backdrop-filter: blur(6px);
+         border-bottom:1px solid #1a1a1a; z-index:10}
+  .wrap{max-width:1100px; margin:0 auto; padding:18px 16px}
+  .brand{display:flex; align-items:center; gap:12px}
+  .sigil{width:38px;height:38px;border:1px solid var(--crimson); border-radius:50%; box-shadow:0 0 18px var(--glow) inset, 0 0 8px rgba(255,0,64,.5)}
+  .title{font-size:1.25rem; letter-spacing:.08em; color:#fff}
+  nav{margin-top:10px; display:flex; gap:18px; flex-wrap:wrap}
+  nav a{color:#ddd; text-decoration:none; font-size:.95rem; padding:6px 10px; border:1px solid #1a1a1a; border-radius:10px; transition:all .2s}
+  nav a:hover{border-color:var(--crimson); color:#fff; text-shadow:0 0 8px var(--blood)}
+  /* Hero */
+  .hero{max-width:1100px; margin:38px auto 18px; padding:24px 16px; text-align:center}
+  .glitch{
+    font-size:clamp(34px, 6vw, 62px);
+    line-height:1.05; letter-spacing:.06em; color:#fff; position:relative; display:inline-block;
+    text-shadow: 0 0 18px rgba(255,0,64,.4);
+    animation: hum 3s ease-in-out infinite;
+  }
+  .glitch::before, .glitch::after{
+    content:attr(data-text); position:absolute; inset:0; mix-blend-mode:screen; opacity:.6;
+  }
+  .glitch::before{transform: translate(-2px,-1px); color:#ff0040; clip-path: inset(0 0 52% 0); filter: blur(.6px)}
+  .glitch::after{transform: translate(2px,1px); color:#00ffe1; clip-path: inset(48% 0 0 0); filter: blur(.6px)}
+  @keyframes hum{0%,100%{text-shadow:0 0 12px rgba(255,0,64,.35)}50%{text-shadow:0 0 22px rgba(255,0,64,.55)}}
+  .sub{margin-top:10px; color:#cfcfcf}
+  .badges{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:16px}
+  .badge{font-size:.8rem; padding:6px 10px; border:1px solid #222; border-radius:999px; color:#cde; background:rgba(0,0,0,.5)}
+  /* Warning banner */
+  .warning{
+    border:1px dashed var(--warn); color:#111; background: linear-gradient(135deg, #fff8b5, #ffd06e);
+    padding:14px 16px; border-radius:12px; box-shadow:0 6px 30px rgba(255,208,110,.18);
+    margin:24px auto; max-width:1000px; color:#1a1000; font-weight:700
+  }
+  .warning small{display:block; color:#4a3a00; font-weight:600}
+  /* Grid sections */
+  .grid{max-width:1100px; margin:0 auto; padding:14px 16px; display:grid; gap:18px}
+  @media(min-width:850px){ .grid{grid-template-columns:1.2fr 1fr} }
+  .card{
+    background: radial-gradient(120% 140% at 10% 0%, rgba(255,0,64,.08), rgba(0,0,0,.6) 60%),
+                linear-gradient(180deg, #0b0b0b, #070707);
+    border:1px solid #1a1a1a; border-radius:16px; padding:18px; box-shadow:0 10px 40px rgba(0,0,0,.7);
+  }
+  .card h2{font-size:1.4rem; color:#fff; letter-spacing:.06em; margin-bottom:8px}
+  .card p{color:#d9e8ff; opacity:.9}
+  .eyebrow{font-size:.8rem; color:var(--blood); text-transform:uppercase; letter-spacing:.2em}
+  .art{
+    aspect-ratio: 16/9; border:1px solid #1f1f1f; border-radius:14px; margin-top:12px;
+    background: radial-gradient(80% 120% at 70% 40%, rgba(0,255,225,.08), transparent 60%),
+                linear-gradient(135deg, #0b0b0b, #000);
+    overflow:hidden; position:relative
+  }
+  .art img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.28; mix-blend-mode:screen}
+  .step{
+    margin-top:12px; padding:12px; border:1px solid #1c1c1c; border-radius:12px;
+    background:rgba(0,0,0,.45); color:#f0f0f0
+  }
+  .step .n{display:inline-grid; place-content:center; width:28px; height:28px;
+    border:1px solid var(--crimson); border-radius:50%; margin-right:8px; font-weight:700; color:#fff}
+  .note{font-size:.9rem; color:#bcd; opacity:.9; margin-top:8px}
+  /* Two paths list */
+  .paths{display:grid; gap:16px; margin-top:10px}
+  .path{
+    padding:14px; border:1px dashed #2a2a2a; border-radius:14px; background:linear-gradient(180deg,#0b0b0b,#060606);
+  }
+  .path h3{color:#fff; margin-bottom:6px}
+  .kbd{font-family:inherit; border:1px solid #2a2a2a; padding:2px 6px; border-radius:6px; background:#111; color:#ddd}
+  .cta{
+    display:inline-block; margin-top:12px; padding:12px 16px; border-radius:12px; text-decoration:none; font-weight:700;
+    border:1px solid var(--crimson); color:#fff; background:linear-gradient(135deg, rgba(177,0,47,.25), transparent);
+    box-shadow:0 0 18px rgba(177,0,47,.25); transition: all .2s;
+  }
+  .cta:hover{box-shadow:0 0 26px rgba(177,0,47,.45)}
+  /* Footer */
+  footer{max-width:1100px; margin:24px auto 60px; padding:0 16px; color:#aaa; font-size:.9rem}
+  footer a{color:#eee}
+  /* Subtle “pulse” divider */
+  .divider{height:1px; width:100%; background:linear-gradient(90deg, transparent, #25000a, #510016, #25000a, transparent); margin:18px 0; filter: drop-shadow(0 0 8px rgba(255,0,64,.3))}
+  /* Audio toggle */
+  .sound{
+    position:fixed; right:14px; bottom:14px; z-index:20;
+    background:rgba(0,0,0,.6); border:1px solid #1a1a1a; border-radius:12px; padding:10px 12px; color:#ddd;
+    display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none
+  }
+  .sound:hover{border-color:#2a2a2a}
+  .sr{position:absolute; left:-9999px}
+</style>
+</head>
+<body>
+  <div class="bg-photo" aria-hidden="true"></div>
+  <div class="dust" aria-hidden="true"></div>
+
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="sigil" aria-hidden="true"></div>
+        <div class="title">SIHR // The Veil of Whispers</div>
+      </div>
+      <nav aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#warnings">Warnings</a>
+        <a href="#paths">Two Paths</a>
+        <a href="#dummy-steps">Dummy Steps</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="about">
+      <h1 class="glitch" data-text="A Fictional Archive of Shadows">A Fictional Archive of Shadows</h1>
+      <p class="sub">An atmospheric page inspired by sihr lore. <strong>Entertainment only.</strong> No real rituals. No real instructions.</p>
+      <div class="badges">
+        <span class="badge">Dummy Content</span>
+        <span class="badge">No Real Magic</span>
+        <span class="badge">Tor-Friendly</span>
+        <span class="badge">Self-Hosted</span>
+      </div>
+    </section>
+
+    <div class="warning" id="warnings" role="note" aria-label="Important warning and disclaimer">
+      ⚠️ <strong>Warning / Disclaimer:</strong> This page is a work of fiction for visual effect and storytelling.
+      It contains <em>no actionable occult practices</em>, no medical or legal advice, and no instructions that should be followed in real life.
+      Do not attempt to imitate anything you see here. If you are distressed, seek help from qualified professionals.
+      <small>By continuing, you acknowledge this is entertainment only.</small>
+    </div>
+
+    <div class="grid" id="paths">
+      <article class="card">
+        <div class="eyebrow">Two Ways Through The Veil (Fiction)</div>
+        <h2>Choose Your Imaginary Path</h2>
+        <p>Legends speak of two playful tokens used by storytellers to weave harmless tales: the <strong>Egg</strong> and the <strong>Teddy</strong>. Neither unlocks anything—except your imagination.</p>
+        <div class="paths">
+          <div class="path">
+            <h3>Path of the Egg 🥚</h3>
+            <p class="note">Symbol of beginnings. In fiction only.</p>
+            <a class="cta" href="#dummy-steps">View dummy steps</a>
+          </div>
+          <div class="path">
+            <h3>Path of the Teddy 🐨</h3>
+            <p class="note">Guardian of comfort. In fiction only.</p>
+            <a class="cta" href="#dummy-steps">View dummy steps</a>
+          </div>
+        </div>
+        <div class="art" aria-hidden="true">
+          <!-- If you add images, they will overlay subtly -->
+          <img src="/egg.jpg" alt="" onerror="this.remove()">
+          <img src="/teddy.jpg" alt="" style="opacity:.22" onerror="this.remove()">
+        </div>
+      </article>
+
+      <aside class="card">
+        <div class="eyebrow">Site Notes</div>
+        <h2>How to Use this Page</h2>
+        <div class="step"><span class="n">1</span> Read the <strong>Warning</strong> above. This is fiction—don’t replicate.</div>
+        <div class="step"><span class="n">2</span> Explore the sections for **visual design ideas**: structure, grids, cards, lists.</div>
+        <div class="step"><span class="n">3</span> Swap assets by placing <code class="kbd">/ritual-bg.jpg</code>, <code class="kbd">/egg.jpg</code>, and <code class="kbd">/teddy.jpg</code> in your web root.</div>
+        <div class="step"><span class="n">4</span> Edit text, colors, and effects to suit your theme.</div>
+        <p class="note">Tip: For Tor/Apache, set file perms: <code class="kbd">chown www-data:www-data file</code> and <code class="kbd">chmod 644 file</code>.</p>
+      </aside>
+    </div>
+
+    <div class="wrap">
+      <div class="divider" role="presentation"></div>
+    </div>
+
+    <section class="grid" id="dummy-steps" aria-labelledby="dummy-steps-h">
+      <article class="card">
+        <div class="eyebrow">Fictional Outline</div>
+        <h2 id="dummy-steps-h">Dummy “Steps” — Path of the Egg 🥚 (Make-Believe)</h2>
+        <p>These are <em>theatrical</em> steps with zero real-world effect. They exist to show layout and tone.</p>
+        <ol style="margin-top:10px; padding-left:20px">
+          <li class="step"><span class="n">1</span> In your imagination, “draw” a small circle of light around a paper egg doodle.</li>
+          <li class="step"><span class="n">2</span> Whisper a line of poetry that makes you smile.</li>
+          <li class="step"><span class="n">3</span> Pretend the doodle glows; take three deep breaths; relax your shoulders.</li>
+          <li class="step"><span class="n">4</span> Write a kind wish to your future self. Fold the paper. Done.</li>
+        </ol>
+        <p class="note">Reminder: This is **fictional ambiance** only—no occult or harmful content here.</p>
+      </article>
+
+      <article class="card">
+        <div class="eyebrow">Fictional Outline</div>
+        <h2>Dummy “Steps” — Path of the Teddy 🐨 (Make-Believe)</h2>
+        <p>Another harmless template for layout practice:</p>
+        <ol style="margin-top:10px; padding-left:20px">
+          <li class="step"><span class="n">1</span> Place a teddy illustration on the page (or imagine one).</li>
+          <li class="step"><span class="n">2</span> Think of a comforting memory and write one sentence about it.</li>
+          <li class="step"><span class="n">3</span> Tap the page gently three times—purely symbolic, purely pretend.</li>
+          <li class="step"><span class="n">4</span> Close the browser tab with gratitude. That’s it.</li>
+        </ol>
+        <p class="note">No real rituals. This is a CSS/HTML showcase disguised as lore.</p>
+      </article>
+    </section>
+
+    <div class="wrap">
+      <div class="divider" role="presentation"></div>
+    </div>
+
+    <section class="grid" id="faq" aria-labelledby="faq-h">
+      <article class="card">
+        <div class="eyebrow">FAQ</div>
+        <h2 id="faq-h">Frequently Asked (Fictional) Questions</h2>
+        <p class="step"><strong>Is this a real sihr site?</strong><br> No. It’s an atmospheric demo page with dummy content only.</p>
+        <p class="step"><strong>Why the warnings?</strong><br> To be absolutely clear: this isn’t guidance, advice, or ritual—just design.</p>
+        <p class="step"><strong>Can I reuse this?</strong><br> Yes. Modify text, colors, and sections to build your own spooky theme.</p>
+        <p class="step"><strong>Tor tips?</strong><br> Keep assets local, use relative or root-absolute paths, and ensure file permissions allow reads by Apache.</p>
+      </article>
+
+      <aside class="card">
+        <div class="eyebrow">Customization</div>
+        <h2>Make It Yours</h2>
+        <p class="step">Change accent colors in <code class="kbd">:root</code>.</p>
+        <p class="step">Replace background with <code class="kbd">/ritual-bg.jpg</code>.</p>
+        <p class="step">Add section pages: <code class="kbd">sec1.html</code> … <code class="kbd">sec5.html</code> and link them from the nav.</p>
+        <p class="step">Want jump scares? Reuse your <code class="kbd">#jumpscare</code> overlay with a button trigger (still fictional artwork).</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>Disclaimer:</strong> This site is fictional and for entertainment/design practice only. No real rituals. No guarantees. No claims.</p>
+    <p>Onion: <code>tufc6idbnhpls4esctj5sn6rhbjcbnxu7ohv34c4xsqzquqakn4wcyad.onion</code> • © 2025 The Veil of Whispers</p>
+  </footer>
+
+  <!-- Optional ambient audio (requires user click, Tor blocks autoplay) -->
+  <button class="sound" id="soundBtn" aria-pressed="false">
+    <span aria-hidden="true">🔊</span> <span>Ambient</span>
+  </button>
+  <audio id="amb" loop>
+    <!-- Put a local mp3 like /ambient.mp3 in your web root if you want -->
+    <source src="/ambient.mp3" type="audio/mpeg">
+  </audio>
+
+<script>
+  // Floating dust particles (lightweight)
+  (function makeDust(){
+    const dust = document.querySelector('.dust');
+    const count = 90;
+    for(let i=0;i<count;i++){
+      const s=document.createElement('div');
+      s.className='spark';
+      s.style.left = Math.random()*100+'vw';
+      s.style.top = Math.random()*100+'vh';
+      s.style.animationDelay = (-Math.random()*14)+'s';
+      s.style.opacity = (0.25 + Math.random()*0.6).toFixed(2);
+      dust.appendChild(s);
+    }
+  })();
+
+  // Ambient audio toggle (user gesture)
+  (function sound(){
+    const btn = document.getElementById('soundBtn');
+    const amb = document.getElementById('amb');
+    btn.addEventListener('click', async () => {
+      try{
+        if(amb.paused){ await amb.play(); btn.setAttribute('aria-pressed','true'); btn.firstElementChild.textContent='🔈'; }
+        else{ amb.pause(); btn.setAttribute('aria-pressed','false'); btn.firstElementChild.textContent='🔊'; }
+      }catch(e){ /* Tor may block if no source; ignore */ }
+    });
+  })();
+</script>
+</body>
+</html>
