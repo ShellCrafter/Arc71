@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>HINT :: STEGANOGRAPHIC KEY</title>
+    <!-- Add CSP header to prevent sandbox warnings -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    
     <style>
         body {
             margin: 0;
@@ -75,6 +78,7 @@
             position: relative;
             overflow: hidden;
             text-align: center;
+            text-decoration: none;
         }
         .btn:hover {
             background: rgba(0, 243, 255, 0.15);
@@ -127,6 +131,31 @@
             margin-top: 8px;
             display: block;
         }
+        .download-section {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .download-method {
+            background: rgba(10, 20, 40, 0.5);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #333;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+        .download-method h4 {
+            margin-top: 0;
+            color: #00f3ff;
+        }
+        .method-tip {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
@@ -162,11 +191,46 @@
 
         <div class="image-section">
             <div class="image-container" id="image-container">
-                <img src="rootAnony.jpeg" alt="Steganographic Carrier" class="stego-image">
+                <img src="rootAnony.jpeg" alt="Steganographic Carrier" class="stego-image" id="stego-image">
                 <span class="image-label">rootAnony.jpeg • Steganographic carrier</span>
 
-                <!-- FIXED DOWNLOAD BUTTON -->
-                <a class="btn" href="rootAnony.jpeg" download="rootAnony.jpeg">💾 DOWNLOAD TO LOCAL</a>
+                <!-- Primary Download Button -->
+                <div style="margin-top: 20px;">
+                    <button class="btn" id="download-btn">💾 DOWNLOAD IMAGE</button>
+                </div>
+            </div>
+            
+            <!-- Alternative Download Methods (shown when image is visible) -->
+            <div class="download-section" id="download-section" style="display: none;">
+                <div class="download-method">
+                    <h4>Method 1: Direct Download</h4>
+                    <a class="btn" href="rootAnony.jpeg" download="rootAnony.jpeg" id="direct-download">
+                        ⬇️ Click to Download
+                    </a>
+                    <div class="method-tip">Works best in standalone tabs</div>
+                </div>
+                
+                <div class="download-method">
+                    <h4>Method 2: Right-Click</h4>
+                    <button class="btn" id="right-click-guide">
+                        🖱️ Show Instructions
+                    </button>
+                    <div class="method-tip">Right-click image → "Save image as..."</div>
+                </div>
+                
+                <div class="download-method">
+                    <h4>Method 3: Open in New Tab</h4>
+                    <a class="btn" href="rootAnony.jpeg" target="_blank" rel="noopener noreferrer">
+                        🔗 Open in New Tab
+                    </a>
+                    <div class="method-tip">Then right-click to save</div>
+                </div>
+            </div>
+            
+            <div class="warning" id="right-click-instructions" style="display: none; background: rgba(255,102,102,0.1); padding: 10px; border-radius: 4px;">
+                💡 <strong>Right-click Instructions:</strong> Hover over the image above, right-click on it, 
+                then select "Save image as..." or "Save picture as..." to download it to your computer.
+                <button class="btn" id="close-instructions" style="margin-left: 10px; padding: 2px 8px; font-size: 0.8rem;">Close</button>
             </div>
         </div>
 
@@ -174,60 +238,190 @@
     </div>
 
 <script>
+    // DOM Elements
     const container = document.getElementById("image-container");
     const showBtn = document.getElementById("show-btn");
-    const downloadBtn = document.querySelector('.btn[href="rootAnony.jpeg"]');
+    const downloadBtn = document.getElementById("download-btn");
+    const directDownloadLink = document.getElementById("direct-download");
+    const downloadSection = document.getElementById("download-section");
+    const rightClickGuide = document.getElementById("right-click-guide");
+    const rightClickInstructions = document.getElementById("right-click-instructions");
+    const closeInstructions = document.getElementById("close-instructions");
+    const stegoImage = document.getElementById("stego-image");
 
+    // Show/Hide Image
     showBtn.addEventListener("click", () => {
         const visible = container.style.display === "block";
         container.style.display = visible ? "none" : "block";
+        downloadSection.style.display = visible ? "none" : "flex";
         showBtn.textContent = visible ? "👁️ SHOW IMAGE" : "✕ HIDE IMAGE";
+        
+        if (!visible) {
+            // Preload image for better download performance
+            const img = new Image();
+            img.src = 'rootAnony.jpeg';
+        }
     });
 
-    // ✅ Fix download: Force download via fetch → Blob → ObjectURL
-    if (downloadBtn) {
-        downloadBtn.addEventListener('click', async (e) => {
-            e.preventDefault(); // Cancel default link behavior
-            try {
-                const response = await fetch('rootAnony.jpeg');
-                if (!response.ok) throw new Error('Image not found');
-                
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'rootAnony.jpeg';
-                document.body.appendChild(a);
-                a.click();
-                
-                // Cleanup
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-            } catch (err) {
-                console.error('Download failed:', err);
-                alert('❌ Failed to download image. Check console.');
+    // Enhanced Download Function
+    async function downloadImage() {
+        try {
+            // Method 1: Try using fetch + Blob (works in most modern browsers)
+            const response = await fetch('rootAnony.jpeg', {
+                cache: 'no-cache',
+                headers: {
+                    'Content-Type': 'image/jpeg'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
-        });
+            
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            
+            // Create invisible download link
+            const tempLink = document.createElement('a');
+            tempLink.style.display = 'none';
+            tempLink.href = blobUrl;
+            tempLink.download = 'rootAnony.jpeg';
+            
+            // Add to DOM, click, and remove
+            document.body.appendChild(tempLink);
+            tempLink.click();
+            
+            // Cleanup
+            setTimeout(() => {
+                document.body.removeChild(tempLink);
+                window.URL.revokeObjectURL(blobUrl);
+            }, 100);
+            
+            return true;
+            
+        } catch (fetchError) {
+            console.warn('Fetch method failed:', fetchError);
+            
+            // Method 2: Fallback to direct link
+            try {
+                const tempLink = document.createElement('a');
+                tempLink.style.display = 'none';
+                tempLink.href = 'rootAnony.jpeg';
+                tempLink.download = 'rootAnony.jpeg';
+                
+                document.body.appendChild(tempLink);
+                tempLink.click();
+                
+                setTimeout(() => {
+                    document.body.removeChild(tempLink);
+                }, 100);
+                
+                return true;
+            } catch (directError) {
+                console.warn('Direct method failed:', directError);
+                
+                // Method 3: Open in new tab as final fallback
+                window.open('rootAnony.jpeg', '_blank');
+                alert('Image opened in new tab. Please right-click and save it from there.');
+                return false;
+            }
+        }
     }
 
-    // Countdown
+    // Main Download Button
+    downloadBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        downloadBtn.disabled = true;
+        downloadBtn.textContent = '⏳ Downloading...';
+        
+        const success = await downloadImage();
+        
+        downloadBtn.disabled = false;
+        downloadBtn.textContent = success ? '✅ Download Complete!' : '💾 Download Image';
+        
+        // Reset button text after 3 seconds
+        setTimeout(() => {
+            downloadBtn.textContent = '💾 Download Image';
+        }, 3000);
+    });
+
+    // Direct Download Link
+    directDownloadLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        downloadImage();
+    });
+
+    // Right-click Guide
+    rightClickGuide.addEventListener('click', () => {
+        rightClickInstructions.style.display = 'block';
+    });
+
+    closeInstructions.addEventListener('click', () => {
+        rightClickInstructions.style.display = 'none';
+    });
+
+    // Add context menu hint to the image
+    stegoImage.addEventListener('contextmenu', (e) => {
+        console.log('Right-click detected on image');
+        // Don't prevent default - let the context menu appear
+    });
+
+    // Add title/tooltip for right-click hint
+    stegoImage.title = "Right-click to save this image";
+
+    // Countdown Timer
     let time = 60;
-    const el = document.getElementById('countdown');
+    const countdownEl = document.getElementById('countdown');
     const timer = setInterval(() => {
         time--;
-        el.textContent = time;
+        countdownEl.textContent = time;
+        
+        // Visual warning when time is low
+        if (time <= 10) {
+            countdownEl.style.color = '#ff2a00';
+            countdownEl.style.animation = 'blink 0.5s infinite';
+        }
+        
         if (time <= 0) {
-            document.body.innerHTML = `
-            <div style="text-align:center;color:#ff2a00;padding:50px;font-size:1.2rem;line-height:1.8;">
-                > SESSION EXPIRED<br>
-                > IMAGE LINK DISABLED<br>
-            </div>`;
             clearInterval(timer);
+            document.body.innerHTML = `
+            <div style="text-align:center;color:#ff2a00;padding:50px;font-size:1.2rem;line-height:1.8;background:#000;min-height:100vh;">
+                <div style="margin-bottom:30px;">
+                    <div style="font-size:3rem;">⏰</div>
+                    <div style="font-family:'Source Code Pro', monospace;">
+                        > SESSION EXPIRED<br>
+                        > IMAGE ACCESS REVOKED<br>
+                        > CONNECTION TERMINATED<br>
+                    </div>
+                </div>
+                <div style="color:#888;font-size:0.9rem;margin-top:50px;">
+                    Refresh the page to start a new session
+                </div>
+            </div>`;
         }
     }, 1000);
+
+    // Prevent iframe sandbox warnings
+    if (window.self !== window.top) {
+        // We're in an iframe - add special handling
+        console.log('Page is running inside an iframe');
+        
+        // Try to request download permissions
+        try {
+            // This is for informational purposes only
+            const iframeWarning = document.createElement('div');
+            iframeWarning.className = 'warning';
+            iframeWarning.style.marginTop = '20px';
+            iframeWarning.innerHTML = '🔒 <strong>Iframe Detected:</strong> If download fails, try opening this page in a new tab for full functionality.';
+            document.querySelector('.image-section').appendChild(iframeWarning);
+        } catch (e) {
+            // Silent fail
+        }
+    }
+
+    // Initialize with image hidden
+    container.style.display = 'none';
+    downloadSection.style.display = 'none';
 </script>
 </body>
 </html>
-
-
