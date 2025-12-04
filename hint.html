@@ -2,256 +2,84 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>HINT :: STEGANOGRAPHIC KEY</title>
-    <!-- This meta tag prevents the page from being embedded in an iframe -->
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none';">
-    
+    <title>DOWNLOAD STEGANOGRAPHY IMAGE</title>
     <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            background: #000;
-            color: #00ff41;
-            font-family: 'Source Code Pro', monospace;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        .hint-container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .terminal-line {
-            margin: 10px 0;
-        }
-        .blink-cursor {
-            display: inline-block;
-            width: 8px;
-            height: 16px;
-            background: #00ff41;
-            animation: blink 1s infinite;
-            vertical-align: middle;
-            margin-left: 4px;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        .caesar-clue {
-            color: #ff2a00;
-            text-shadow: 0 0 6px #ff2a00;
-            margin: 20px 0;
-            padding: 14px;
-            border-left: 3px solid #ff2a00;
-            background: rgba(27, 5, 5, 0.2);
-            border-radius: 0 4px 4px 0;
-        }
-        .stego-box {
-            background: rgba(10, 15, 30, 0.3);
-            border: 1px dashed #00f3ff;
-            border-radius: 4px;
-            padding: 16px;
-            margin: 20px 0;
-        }
-        .stego-title {
-            color: #00f3ff;
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-        .stego-title::before {
-            content: '🔍 ';
-        }
-        .btn {
-            display: inline-block;
-            background: transparent;
-            border: 1px solid #00f3ff;
-            color: #00f3ff;
-            padding: 8px 16px;
-            margin: 10px 5px;
-            font-family: 'Source Code Pro', monospace;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.3s;
+        body { background: black; color: lime; font-family: monospace; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; text-align: center; }
+        h1 { color: cyan; }
+        .image-box { border: 2px dashed cyan; padding: 20px; margin: 20px 0; }
+        img { max-width: 100%; border: 1px solid lime; }
+        .instructions { background: #111; padding: 15px; margin: 20px 0; text-align: left; }
+        .download-btn { 
+            display: inline-block; 
+            background: darkblue; 
+            color: white; 
+            padding: 15px 30px; 
+            margin: 10px; 
             text-decoration: none;
-        }
-        .btn:hover {
-            background: rgba(0, 243, 255, 0.15);
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.5);
-        }
-        .passphrase {
-            color: #9d00ff;
-            font-weight: bold;
-            background: rgba(30, 0, 50, 0.4);
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-family: monospace;
-        }
-        .warning {
-            color: #ff6666;
-            font-size: 0.95rem;
-            margin-top: 12px;
-            padding-left: 20px;
-            position: relative;
-        }
-        .warning::before {
-            content: '⚠️';
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-        .image-container {
-            background: rgba(5, 5, 10, 0.5);
-            border: 1px solid #333;
-            border-radius: 4px;
-            padding: 12px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .stego-image {
-            max-width: 100%;
-            height: auto;
-            border: 2px solid rgba(0, 243, 255, 0.3);
-            border-radius: 4px;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
-        }
-        .image-label {
-            font-size: 0.9rem;
-            color: #aaa;
-            margin-top: 8px;
-            display: block;
-        }
-        .download-options {
-            background: rgba(10, 20, 40, 0.5);
-            padding: 20px;
-            border-radius: 6px;
-            border: 1px solid #333;
-            margin: 20px 0;
-        }
-        .download-options h3 {
-            color: #00f3ff;
-            margin-top: 0;
+            border: 2px solid cyan;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <div class="hint-container">
-        <div class="terminal-line">> Initializing hint protocol...</div>
-        <div class="terminal-line">> Scanning memory archives...</div>
-        <div class="terminal-line">> Found steganographic payload: <span style="color:#00f3ff">rootAnony.jpeg</span></div>
-        <div class="terminal-line">> Layer: LSB + AES-128 (passphrase-locked)</div>
+    <div class="container">
+        <h1>⚠️ IMPORTANT: Download This Image</h1>
         
-        <div class="caesar-clue">
-            ◈ The final passkey is <strong>not plain text</strong> — it is hidden in an image.<br>
-            ◈ You have the image. You have the key. Now extract.
+        <div class="image-box">
+            <img src="rootAnony.jpeg" alt="Stego Image" id="the-image">
+            <p><strong>Filename:</strong> rootAnony.jpeg</p>
         </div>
-
-        <div class="stego-box">
-            <div class="stego-title">STEGANOGRAPHY INSTRUCTIONS</div>
-            <ol>
-                <li>Download the image using any method below.</li>
-                <li>Use <code>steghide</code> or online decoder.</li>
-                <li>Command:
-                    <pre style="background:#0a0a12;padding:8px;margin:8px 0;border-left:2px solid #9d00ff;color:#ddd;font-size:0.95rem;">steghide extract -sf rootAnony.jpeg</pre>
-                </li>
-                <li>Passphrase:</li>
-                <div style="margin:10px 0; padding:10px; background:rgba(20,10,30,0.4); border-radius:4px;">
-                    <code class="passphrase">RichuLearning2025!</code>
-                </div>
-            </ol>
-            <div class="warning">
-                Do NOT share this passphrase.
-            </div>
+        
+        <h2>THREE WAYS TO DOWNLOAD:</h2>
+        
+        <div>
+            <a href="rootAnony.jpeg" class="download-btn" download>1. CLICK TO DOWNLOAD</a><br><br>
+            <a href="rootAnony.jpeg" class="download-btn" target="_blank">2. OPEN IN NEW TAB</a><br><br>
+            <button class="download-btn" onclick="forceDownload()">3. FORCE DOWNLOAD</button>
         </div>
-
-        <!-- ALWAYS VISIBLE IMAGE -->
-        <div class="image-container">
-            <img src="rootAnony.jpeg" alt="Steganographic Carrier" class="stego-image" id="stego-image">
-            <span class="image-label">rootAnony.jpeg • Steganographic carrier</span>
+        
+        <div class="instructions">
+            <h3>INSTRUCTIONS AFTER DOWNLOAD:</h3>
+            <pre>
+1. Save the image to your computer
+2. Open terminal/command prompt
+3. Run: steghide extract -sf rootAnony.jpeg
+4. When prompted for passphrase, enter: RichuLearning2025!
+5. Extract the hidden file
+            </pre>
         </div>
-
-        <!-- GUARANTEED WORKING DOWNLOAD METHODS -->
-        <div class="download-options">
-            <h3>✅ GUARANTEED DOWNLOAD METHODS:</h3>
-            
-            <p><strong>Method 1: Right-Click (ALWAYS WORKS)</strong></p>
-            <p style="color:#aaa;">→ Right-click the image above → "Save image as..."</p>
-            
-            <p><strong>Method 2: Direct Links (Open in New Tab)</strong></p>
-            <div style="margin: 15px 0;">
-                <a href="rootAnony.jpeg" target="_blank" class="btn">🔗 Open Image in New Tab</a>
-                <a href="rootAnony.jpeg" download="rootAnony.jpeg" class="btn">⬇️ Direct Download</a>
-            </div>
-            
-            <p><strong>Method 3: Copy Image URL</strong></p>
-            <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px; margin: 10px 0;">
-                <code id="image-url" style="color:#00ff41; word-break: break-all;">rootAnony.jpeg</code>
-                <button onclick="copyUrl()" class="btn" style="margin-left: 10px; padding: 4px 8px;">📋 Copy URL</button>
-            </div>
-        </div>
-
-        <div class="terminal-line">> Warning: This session expires in <span id="countdown">60</span>s <span class="blink-cursor"></span></div>
+        
+        <p style="color: red;">If nothing works, right-click the image above and choose "Save image as..."</p>
     </div>
 
 <script>
-    // Simple countdown timer
-    let time = 60;
-    const countdownEl = document.getElementById('countdown');
-    const timer = setInterval(() => {
-        time--;
-        countdownEl.textContent = time;
-        
-        if (time <= 0) {
-            clearInterval(timer);
-            // Only show expired message, don't remove image
-            document.body.innerHTML += `
-            <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:1000;display:flex;align-items:center;justify-content:center;color:#ff2a00;font-size:1.5rem;text-align:center;">
-                <div>
-                    <div>⏰ SESSION EXPIRED</div>
-                    <div style="font-size:1rem;color:#888;margin-top:20px;">Image download still available</div>
-                </div>
-            </div>`;
-        }
-    }, 1000);
-
-    // Copy URL function
-    function copyUrl() {
-        const url = window.location.origin + '/' + 'rootAnony.jpeg';
-        navigator.clipboard.writeText(url).then(() => {
-            alert('✅ Image URL copied to clipboard!');
-        }).catch(() => {
-            const input = document.createElement('input');
-            input.value = url;
-            document.body.appendChild(input);
-            input.select();
-            document.execCommand('copy');
-            document.body.removeChild(input);
-            alert('✅ Image URL copied to clipboard!');
-        });
-    }
-
-    // Add title to image for right-click hint
-    document.getElementById('stego-image').title = "Right-click → Save image as...";
-
-    // Force page to open in top-level window (breaks out of iframe)
-    if (window.self !== window.top) {
-        // Try to break out of iframe
+    // Force download using multiple methods
+    async function forceDownload() {
         try {
-            window.top.location = window.self.location;
+            // Method 1: Direct download
+            const link = document.createElement('a');
+            link.href = 'rootAnony.jpeg';
+            link.download = 'rootAnony.jpeg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Method 2: Backup - open in new window
+            setTimeout(() => {
+                window.open('rootAnony.jpeg', '_blank');
+            }, 500);
+            
+            alert('Download initiated. If not working, image opened in new tab.');
+            
         } catch (e) {
-            // If we can't break out, show a message
-            document.body.innerHTML = `
-            <div style="text-align:center;padding:50px;color:#ff2a00;">
-                <h2>⚠️ IFRAME DETECTED</h2>
-                <p>For full functionality, please open this page directly:</p>
-                <p><a href="${window.location.href}" target="_blank" style="color:#00f3ff;font-size:1.2rem;">CLICK HERE TO OPEN IN NEW TAB</a></p>
-                <p style="color:#888;margin-top:30px;">(Downloads may not work inside iframes due to browser security)</p>
-            </div>`;
+            // Final fallback
+            window.open('rootAnony.jpeg', '_blank');
         }
     }
+    
+    // Auto-start download on page load (optional)
+    // setTimeout(forceDownload, 1000);
 </script>
 </body>
 </html>
