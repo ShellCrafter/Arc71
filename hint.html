@@ -101,6 +101,7 @@
             left: 0;
             top: 0;
         }
+
         .image-section {
             margin: 25px 0;
             text-align: center;
@@ -164,7 +165,8 @@
                 <img src="rootAnony.jpeg" alt="Steganographic Carrier" class="stego-image">
                 <span class="image-label">rootAnony.jpeg • Steganographic carrier</span>
 
-                <button class="btn" id="download-btn">💾 DOWNLOAD TO LOCAL</button>
+                <!-- FIXED DOWNLOAD BUTTON -->
+                <a class="btn" href="rootAnony.jpeg" download="rootAnony.jpeg">💾 DOWNLOAD TO LOCAL</a>
             </div>
         </div>
 
@@ -174,43 +176,11 @@
     <script>
         const container = document.getElementById("image-container");
         const showBtn = document.getElementById("show-btn");
-        const downloadBtn = document.getElementById("download-btn");
 
-        // Show / hide
         showBtn.addEventListener("click", () => {
             const visible = container.style.display === "block";
             container.style.display = visible ? "none" : "block";
             showBtn.textContent = visible ? "👁️ SHOW IMAGE" : "✕ HIDE IMAGE";
-        });
-
-        // FORCE DOWNLOAD (BLOB)
-        downloadBtn.addEventListener("click", async () => {
-            try {
-                const response = await fetch("rootAnony.jpeg");
-                const blob = await response.blob();
-                const url = URL.createObjectURL(blob);
-
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "rootAnony.jpeg";
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-
-                URL.revokeObjectURL(url);
-
-                downloadBtn.innerHTML = "✓ DOWNLOADED";
-                downloadBtn.style.color = "#00ff41";
-                downloadBtn.style.borderColor = "#00ff41";
-
-                setTimeout(() => {
-                    downloadBtn.innerHTML = "💾 DOWNLOAD TO LOCAL";
-                    downloadBtn.style.color = "#00f3ff";
-                    downloadBtn.style.borderColor = "#00f3ff";
-                }, 2000);
-            } catch (err) {
-                alert("Download failed.");
-            }
         });
 
         // Countdown
