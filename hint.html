@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>HINT :: STEGANOGRAPHIC KEY</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #000;
+            color: #00ff41;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .hint-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .terminal-line {
+            margin: 10px 0;
+        }
+        .blink-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: #00ff41;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .caesar-clue {
+            color: #ff2a00;
+            text-shadow: 0 0 6px #ff2a00;
+            margin: 20px 0;
+            padding: 14px;
+            border-left: 3px solid #ff2a00;
+            background: rgba(27, 5, 5, 0.2);
+            border-radius: 0 4px 4px 0;
+        }
+        .stego-box {
+            background: rgba(10, 15, 30, 0.3);
+            border: 1px dashed #00f3ff;
+            border-radius: 4px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        .stego-title {
+            color: #00f3ff;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .stego-title::before {
+            content: '🔍 ';
+        }
+        .btn {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid #00f3ff;
+            color: #00f3ff;
+            padding: 8px 16px;
+            margin-top: 10px;
+            font-family: 'Source Code Pro', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .btn:hover {
+            background: rgba(0, 243, 255, 0.15);
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.5);
+        }
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 243, 255, 0.4), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .btn:hover::after {
+            opacity: 1;
+        }
+        .passphrase {
+            color: #9d00ff;
+            font-weight: bold;
+            background: rgba(30, 0, 50, 0.4);
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .warning {
+            color: #ff6666;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Image preview styles */
+        .image-section {
+            margin: 25px 0;
+            text-align: center;
+        }
+        .image-container {
+            background: rgba(5, 5, 10, 0.5);
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 12px;
+            display: none; /* Hidden by default */
+            max-width: 100%;
+        }
+        .stego-image {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid rgba(0, 243, 255, 0.3);
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+        }
+        .image-label {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-top: 8px;
+            display: block;
+        }
+        .download-section {
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="hint-container">
+        <div class="terminal-line">> Initializing hint protocol...</div>
+        <div class="terminal-line">> Scanning memory archives...</div>
+        <div class="terminal-line">> Found steganographic payload: <span style="color:#00f3ff">rootAnony.jpeg</span></div>
+        <div class="terminal-line">> Layer: LSB + AES-128 (passphrase-locked)</div>
+        
+        <div class="caesar-clue">
+            ◈ The final passkey is <strong>not plain text</strong> — it is hidden in an image.<br>
+            ◈ You have the image. You have the key. Now extract.
+        </div>
+
+        <div class="stego-box">
+            <div class="stego-title">STEGANOGRAPHY INSTRUCTIONS</div>
+            <ol>
+                <li><button class="btn" id="show-btn">👁️ SHOW IMAGE</button></li>
+                <li>Inspect or download the image below.</li>
+                <li>Use <code>steghide</code> or online decoder (e.g., <code>aperisolve.fr</code>)</li>
+                <li>Command:
+                    <pre style="background:#0a0a12;padding:8px;margin:8px 0;border-left:2px solid #9d00ff;color:#ddd;font-size:0.95rem;">steghide extract -sf rootAnony.jpeg</pre>
+                </li>
+                <li>When prompted, enter the <strong>passphrase</strong>:</li>
+                <div style="margin:10px 0; padding:10px; background:rgba(20,10,30,0.4); border-radius:4px;">
+                    <code class="passphrase">RichuLearning2025!</code>
+                </div>
+                <li>A hidden text file (<code>pass.txt</code>) will be extracted.</li>
+            </ol>
+            <div class="warning">
+                Do NOT share this passphrase. It is unique to your session.
+            </div>
+        </div>
+
+        <!-- Image Preview Section -->
+        <div class="image-section">
+            <div class="image-container" id="image-container">
+                <img src="rootAnony.jpeg" alt="Steganographic Carrier" class="stego-image" id="stego-img">
+                <span class="image-label">rootAnony.jpeg • Steganographic carrier (LSB-encoded)</span>
+                <div class="download-section">
+                    <button class="btn" id="download-btn">💾 DOWNLOAD TO LOCAL</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="terminal-line">> Warning: This session expires in <span id="countdown">60</span>s <span class="blink-cursor"></span></div>
+    </div>
+
+    <script>
+        const img = new Image();
+        const container = document.getElementById('image-container');
+        const showBtn = document.getElementById('show-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        let imageLoaded = false;
+
+        // Preload image
+        img.onload = () => {
+            imageLoaded = true;
+            showBtn.textContent = '👁️ SHOW IMAGE (READY)';
+            showBtn.style.borderColor = '#00ff41';
+            showBtn.style.color = '#00ff41';
+        };
+        img.onerror = () => {
+            alert('⚠️ rootAnony.jpeg not found. Ensure it’s in the same folder.');
+        };
+        img.src = 'rootAnony.jpeg';
+
+        // Toggle image visibility
+        showBtn.addEventListener('click', () => {
+            if (!imageLoaded) {
+                alert('Image still loading... wait a moment.');
+                return;
+            }
+            const isVisible = container.style.display === 'block';
+            container.style.display = isVisible ? 'none' : 'block';
+            showBtn.textContent = isVisible ? '👁️ SHOW IMAGE' : '✕ HIDE IMAGE';
+        });
+
+        /* ✅ FINAL WORKING DOWNLOAD FUNCTION — NEVER OPENS IMAGE */
+        downloadBtn.addEventListener('click', () => {
+            fetch('rootAnony.jpeg')
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'rootAnony.jpeg';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+
+                    downloadBtn.innerHTML = '✓ DOWNLOADED';
+                    downloadBtn.style.color = '#00ff41';
+                    downloadBtn.style.borderColor = '#00ff41';
+
+                    setTimeout(() => {
+                        downloadBtn.innerHTML = '💾 DOWNLOAD TO LOCAL';
+                        downloadBtn.style.color = '#00f3ff';
+                        downloadBtn.style.borderColor = '#00f3ff';
+                    }, 2000);
+                })
+                .catch(() => {
+                    alert("Download failed. Make sure 'rootAnony.jpeg' exists.");
+                });
+        });
+
+        // Timer
+        let time = 60;
+        const el = document.getElementById('countdown');
+        const interval = setInterval(() => {
+            time--;
+            el.textContent = time;
+            if (time <= 0) {
+                document.body.innerHTML = 
+                `<div style="text-align:center;color:#ff2a00;padding:50px;font-size:1.2rem;line-height:1.8;">
+                    > SESSION EXPIRED<br>
+                    > STEGANOGRAPHIC LINK TERMINATED<br>
+                    > IMAGE PAYLOAD PURGED<br>
+                    <span style="font-size:0.9rem;color:#777;">(Passphrase: &quot;RichuLearning2025!&quot;)</span>
+                </div>`;
+                clearInterval(interval);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
