@@ -80,19 +80,12 @@
             background: rgba(0, 243, 255, 0.15);
             box-shadow: 0 0 12px rgba(0, 243, 255, 0.5);
         }
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 243, 255, 0.4), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-        .btn:hover::after {
-            opacity: 1;
+        .btn a {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            height: 100%;
         }
         .passphrase {
             color: #9d00ff;
@@ -116,7 +109,6 @@
             top: 0;
         }
 
-        /* Image preview styles */
         .image-section {
             margin: 25px 0;
             text-align: center;
@@ -142,9 +134,6 @@
             margin-top: 8px;
             display: block;
         }
-        .download-section {
-            margin-top: 16px;
-        }
     </style>
 </head>
 <body>
@@ -163,30 +152,30 @@
             <div class="stego-title">STEGANOGRAPHY INSTRUCTIONS</div>
             <ol>
                 <li><button class="btn" id="show-btn">👁️ SHOW IMAGE</button></li>
-                <li>Inspect or download the image below.</li>
-                <li>Use <code>steghide</code> or online decoder (e.g., <code>aperisolve.fr</code>)</li>
+                <li>View or download the image below.</li>
+                <li>Use <code>steghide</code> or online decoder.</li>
                 <li>Command:
                     <pre style="background:#0a0a12;padding:8px;margin:8px 0;border-left:2px solid #9d00ff;color:#ddd;font-size:0.95rem;">steghide extract -sf rootAnony.jpeg</pre>
                 </li>
-                <li>When prompted, enter the <strong>passphrase</strong>:</li>
+                <li>Passphrase:</li>
                 <div style="margin:10px 0; padding:10px; background:rgba(20,10,30,0.4); border-radius:4px;">
                     <code class="passphrase">RichuLearning2025!</code>
                 </div>
-                <li>A hidden text file (<code>pass.txt</code>) will be extracted.</li>
             </ol>
             <div class="warning">
-                Do NOT share this passphrase. It is unique to your session.
+                Do NOT share this passphrase.
             </div>
         </div>
 
-        <!-- Image Preview Section -->
         <div class="image-section">
             <div class="image-container" id="image-container">
-                <img src="rootAnony.jpeg" alt="Steganographic Carrier" class="stego-image" id="stego-img">
-                <span class="image-label">rootAnony.jpeg • Steganographic carrier (LSB-encoded!)</span>
-                <div class="download-section">
-                    <button class="btn" id="download-btn">💾 DOWNLOAD TO LOCAL</button>
-                </div>
+                <img src="rootAnony.jpeg" alt="Steganographic Carrier" class="stego-image">
+                <span class="image-label">rootAnony.jpeg • Steganographic carrier</span>
+
+                <!-- 100% WORKING NETLIFY DOWNLOAD -->
+                <button class="btn">
+                    <a href="rootAnony.jpeg" download="rootAnony.jpeg">💾 DOWNLOAD TO LOCAL</a>
+                </button>
             </div>
         </div>
 
@@ -194,73 +183,30 @@
     </div>
 
     <script>
-        const img = new Image();
-        const container = document.getElementById('image-container');
-        const showBtn = document.getElementById('show-btn');
-        const downloadBtn = document.getElementById('download-btn');
-        let imageLoaded = false;
+        const container = document.getElementById("image-container");
+        const showBtn = document.getElementById("show-btn");
 
-        // Preload
-        img.onload = () => {
-            imageLoaded = true;
-            showBtn.textContent = '👁️ SHOW IMAGE (READY)';
-            showBtn.style.borderColor = '#00ff41';
-            showBtn.style.color = '#00ff41';
-        };
-        img.onerror = () => alert('⚠️ rootAnony.jpeg not found.');
-        img.src = 'rootAnony.jpeg';
-
-        // Show / hide
-        showBtn.addEventListener('click', () => {
-            if (!imageLoaded) return alert('Image loading...');
-            const visible = container.style.display === 'block';
-            container.style.display = visible ? 'none' : 'block';
-            showBtn.textContent = visible ? '👁️ SHOW IMAGE' : '✕ HIDE IMAGE';
+        showBtn.addEventListener("click", () => {
+            const visible = container.style.display === "block";
+            container.style.display = visible ? "none" : "block";
+            showBtn.textContent = visible ? "👁️ SHOW IMAGE" : "✕ HIDE IMAGE";
         });
 
-        /* 
-            ✅ FIXED DOWNLOAD — DIRECT NO-FETCH
-            ✔ Works 100% on Netlify
-            ✔ Downloads instantly
-            ✔ Never opens in a new tab
-        */
-        downloadBtn.addEventListener('click', () => {
-            const a = document.createElement('a');
-            a.href = 'https://rishdin.netlify.app/rootAnony.jpeg';
-            a.download = 'rootAnony.jpeg';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-
-            downloadBtn.innerHTML = '✓ DOWNLOADED';
-            downloadBtn.style.color = '#00ff41';
-            downloadBtn.style.borderColor = '#00ff41';
-            setTimeout(() => {
-                downloadBtn.innerHTML = '💾 DOWNLOAD TO LOCAL';
-                downloadBtn.style.color = '#00f3ff';
-                downloadBtn.style.borderColor = '#00f3ff';
-            }, 2000);
-        });
-
-        // Countdown timer
+        // Countdown
         let time = 60;
         const el = document.getElementById('countdown');
-        const interval = setInterval(() => {
+        const timer = setInterval(() => {
             time--;
             el.textContent = time;
             if (time <= 0) {
                 document.body.innerHTML = `
                 <div style="text-align:center;color:#ff2a00;padding:50px;font-size:1.2rem;line-height:1.8;">
                     > SESSION EXPIRED<br>
-                    > STEGANOGRAPHIC LINK TERMINATED<br>
-                    > IMAGE PAYLOAD PURGED<br>
-                    <span style="font-size:0.9rem;color:#777;">(Passphrase: "RichuLearning2025!")</span>
+                    > IMAGE LINK DISABLED<br>
                 </div>`;
-                clearInterval(interval);
+                clearInterval(timer);
             }
         }, 1000);
     </script>
 </body>
 </html>
-
-
