@@ -1,55 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Real Download Test</title>
+    <meta charset="UTF-8">
+    <title>DOWNLOAD WORKING IMAGE</title>
+    <!-- BREAK OUT OF NETLIFY'S IFRAME -->
     <script>
-        function downloadImage() {
-            // Method 1: Direct download (works in most browsers)
-            const link = document.createElement('a');
-            link.href = 'rootAnony.jpeg';
-            link.download = 'rootAnony_' + Date.now() + '.jpeg'; // Unique name
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            // Method 2: Fallback - open image in new tab
-            setTimeout(() => {
-                window.open('rootAnony.jpeg', '_blank');
-            }, 100);
-            
-            alert('✅ If download didn\'t start:\n1. Check browser downloads\n2. Or right-click image → Save as\n3. The image is now open in a new tab');
+        if (window.self !== window.top) {
+            // Redirect to actual site, not preview
+            window.top.location.href = 'https://rishdin.netlify.app/';
         }
     </script>
 </head>
-<body style="text-align:center; font-family:Arial; padding:50px;">
-    <h1>🖼️ Download Test</h1>
+<body style="text-align:center; padding:50px; font-family:Arial;">
     
-    <img src="rootAnony.jpeg" width="400" 
-         style="border:3px solid red; margin:20px; cursor:pointer;"
-         onclick="downloadImage()"
-         title="Click to download">
+    <h1 style="color:red;">⚠️ DOWNLOAD WON'T WORK IN PREVIEW</h1>
     
-    <br><br>
+    <p>Netlify blocks downloads in their preview iframe.</p>
     
-    <button onclick="downloadImage()" 
-            style="padding:20px 40px; font-size:20px; background:blue; color:white; border:none; border-radius:10px; cursor:pointer;">
-        ⬇️ CLICK TO DOWNLOAD
-    </button>
+    <!-- THIS IS THE WORKING DOWNLOAD LINK -->
+    <a href="https://rishdin.netlify.app/rootAnony.jpeg" 
+       download="rootAnony.jpeg"
+       style="display:inline-block; padding:20px 40px; background:green; color:white; font-size:24px; text-decoration:none; border-radius:10px; margin:20px;">
+        ⬇️ CLICK TO DOWNLOAD (Works)
+    </a>
     
     <br><br>
     
-    <div style="color:red; font-weight:bold; background:#ffe6e6; padding:15px; border-radius:5px; max-width:500px; margin:auto;">
-        ⚠️ Note: When using <code>file://</code> protocol, some browsers:<br>
-        1. May ask where to save<br>
-        2. May save to Desktop instead of Downloads<br>
-        3. May block auto-downloads
+    <img src="rootAnony.jpeg" width="400" style="border:3px solid blue;">
+    
+    <br><br>
+    
+    <div style="background:#ffe6e6; padding:20px; border-radius:10px; max-width:600px; margin:auto;">
+        <h3>Why downloads don't work:</h3>
+        <p>Netlify serves your site in an iframe with:</p>
+        <code>sandbox="allow-scripts allow-same-origin"</code>
+        <p>But <strong>NO allow-downloads</strong> → Downloads blocked!</p>
+        
+        <h3>Solution:</h3>
+        <p>1. Use the green button above (direct link)</p>
+        <p>2. Or visit your actual site: <a href="https://rishdin.netlify.app" target="_blank">rishdin.netlify.app</a></p>
     </div>
     
-    <br>
-    
-    <div style="color:green; background:#e6ffe6; padding:15px; border-radius:5px; max-width:500px; margin:auto;">
-        ✅ Alternative: Right-click the image above and select<br>
-        <strong>"Save image as..."</strong> → Choose Downloads folder
-    </div>
 </body>
 </html>
