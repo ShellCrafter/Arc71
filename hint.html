@@ -1,45 +1,112 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>DOWNLOAD WORKING IMAGE</title>
-    <!-- BREAK OUT OF NETLIFY'S IFRAME -->
-    <script>
-        if (window.self !== window.top) {
-            // Redirect to actual site, not preview
-            window.top.location.href = 'https://rishdin.netlify.app/';
+    <title>Netlify Image Download</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: #f5f5f5;
         }
-    </script>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .download-btn {
+            display: inline-block;
+            background: #dc3545;
+            color: white;
+            padding: 20px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: none;
+            cursor: pointer;
+        }
+        .download-btn:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+        .image-container {
+            margin: 30px 0;
+        }
+        .instructions {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: left;
+        }
+    </style>
 </head>
-<body style="text-align:center; padding:50px; font-family:Arial;">
-    
-    <h1 style="color:red;">⚠️ DOWNLOAD WON'T WORK IN PREVIEW</h1>
-    
-    <p>Netlify blocks downloads in their preview iframe.</p>
-    
-    <!-- THIS IS THE WORKING DOWNLOAD LINK -->
-    <a href="https://rishdin.netlify.app/rootAnony.jpeg" 
-       download="rootAnony.jpeg"
-       style="display:inline-block; padding:20px 40px; background:green; color:white; font-size:24px; text-decoration:none; border-radius:10px; margin:20px;">
-        ⬇️ CLICK TO DOWNLOAD (Works)
-    </a>
-    
-    <br><br>
-    
-    <img src="rootAnony.jpeg" width="400" style="border:3px solid blue;">
-    
-    <br><br>
-    
-    <div style="background:#ffe6e6; padding:20px; border-radius:10px; max-width:600px; margin:auto;">
-        <h3>Why downloads don't work:</h3>
-        <p>Netlify serves your site in an iframe with:</p>
-        <code>sandbox="allow-scripts allow-same-origin"</code>
-        <p>But <strong>NO allow-downloads</strong> → Downloads blocked!</p>
+<body>
+    <div class="container">
+        <h1>🖼️ Download Image from Netlify</h1>
         
-        <h3>Solution:</h3>
-        <p>1. Use the green button above (direct link)</p>
-        <p>2. Or visit your actual site: <a href="https://rishdin.netlify.app" target="_blank">rishdin.netlify.app</a></p>
+        <div class="image-container">
+            <img src="rootAnony.jpeg" alt="Stego Image" width="400" style="max-width:100%; border:3px solid #007bff; border-radius:5px;">
+        </div>
+        
+        <h3>✅ Working Download Methods:</h3>
+        
+        <!-- METHOD 1: Direct Image URL (ALWAYS WORKS) -->
+        <a href="rootAnony.jpeg" class="download-btn" target="_blank">
+            🔗 Method 1: Open Image
+        </a>
+        
+        <p><strong>Then:</strong> Right-click → "Save image as..."</p>
+        
+        <div class="instructions">
+            <h4>💡 Step-by-Step:</h4>
+            <ol>
+                <li>Click the red button above</li>
+                <li>Image opens in new tab</li>
+                <li>Right-click the image</li>
+                <li>Select "Save image as..."</li>
+                <li>Choose Downloads folder</li>
+                <li>Click Save</li>
+            </ol>
+            
+            <h4>🔗 Direct Image URL:</h4>
+            <input type="text" value="https://rishdin.netlify.app/rootAnony.jpeg" 
+                   id="imageUrl" readonly 
+                   style="width:100%; padding:10px; margin:10px 0; border:1px solid #ccc;">
+            <button onclick="copyUrl()" style="padding:10px 20px; background:#6c757d; color:white; border:none; border-radius:5px;">
+                📋 Copy URL
+            </button>
+        </div>
     </div>
-    
+
+    <script>
+        // Copy URL function
+        function copyUrl() {
+            const url = "https://rishdin.netlify.app/rootAnony.jpeg";
+            navigator.clipboard.writeText(url).then(() => {
+                alert('✅ URL copied! Paste in browser to download.');
+            }).catch(() => {
+                document.getElementById('imageUrl').select();
+                document.execCommand('copy');
+                alert('✅ URL copied!');
+            });
+        }
+        
+        // Add right-click hint to image
+        document.querySelector('img').addEventListener('contextmenu', function(e) {
+            console.log('User right-clicked image - perfect for download!');
+        });
+        
+        // Auto-select URL on click
+        document.getElementById('imageUrl').addEventListener('click', function() {
+            this.select();
+        });
+    </script>
 </body>
 </html>
