@@ -1,182 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>HINT :: STEGANOGRAPHIC KEY</title>
-    <!-- These headers break out of Netlify's preview iframe -->
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <title>Real Download Test</title>
     <script>
-        // BREAK OUT OF NETLIFY'S IFRAME IMMEDIATELY
-        if (window.self !== window.top) {
-            window.top.location.href = window.self.location.href;
+        function downloadImage() {
+            // Method 1: Direct download (works in most browsers)
+            const link = document.createElement('a');
+            link.href = 'rootAnony.jpeg';
+            link.download = 'rootAnony_' + Date.now() + '.jpeg'; // Unique name
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Method 2: Fallback - open image in new tab
+            setTimeout(() => {
+                window.open('rootAnony.jpeg', '_blank');
+            }, 100);
+            
+            alert('✅ If download didn\'t start:\n1. Check browser downloads\n2. Or right-click image → Save as\n3. The image is now open in a new tab');
         }
     </script>
-    
-    <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            background: #000;
-            color: #00ff41;
-            font-family: monospace;
-            font-size: 16px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .image-box {
-            border: 3px dashed cyan;
-            padding: 20px;
-            margin: 30px 0;
-            background: rgba(0, 0, 50, 0.3);
-        }
-        img {
-            max-width: 90%;
-            border: 2px solid lime;
-            margin: 20px 0;
-        }
-        .download-btn {
-            display: inline-block;
-            background: #0044cc;
-            color: white;
-            padding: 15px 40px;
-            margin: 15px;
-            font-size: 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            border: 2px solid cyan;
-            cursor: pointer;
-        }
-        .warning {
-            color: red;
-            background: rgba(255, 0, 0, 0.1);
-            padding: 15px;
-            border: 1px solid red;
-            margin: 20px 0;
-        }
-        .instructions {
-            background: #111;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: left;
-            border-left: 4px solid purple;
-        }
-        pre {
-            background: #222;
-            padding: 15px;
-            color: #ff9900;
-            overflow-x: auto;
-        }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>🚨 IMPORTANT: DOWNLOAD REQUIRED</h1>
-        
-        <div class="warning">
-            <strong>NETLIFY USERS:</strong> If download doesn't work below,<br>
-            <a href="https://rishdin.netlify.app/rootAnony.jpeg" target="_blank" style="color: yellow;">
-                CLICK HERE TO OPEN IMAGE DIRECTLY
-            </a>
-        </div>
-        
-        <div class="image-box">
-            <h2>STEGANOGRAPHY IMAGE</h2>
-            <img src="rootAnony.jpeg" alt="rootAnony.jpeg" id="main-image">
-            <p><strong>Filename:</strong> rootAnony.jpeg</p>
-            
-            <div style="margin: 25px 0;">
-                <!-- This WILL work after breaking out of iframe -->
-                <a href="rootAnony.jpeg" class="download-btn" download="rootAnony.jpeg">
-                    ⬇️ DOWNLOAD IMAGE
-                </a>
-                <br>
-                <a href="rootAnony.jpeg" class="download-btn" target="_blank">
-                    🔗 OPEN IN NEW TAB
-                </a>
-            </div>
-            
-            <p style="color: #aaa; font-size: 14px;">
-                <strong>Alternative:</strong> Right-click the image → "Save image as..."
-            </p>
-        </div>
-        
-        <div class="instructions">
-            <h3>🔐 EXTRACTION INSTRUCTIONS</h3>
-            <ol>
-                <li>Download the image above</li>
-                <li>Open terminal/command prompt</li>
-                <li>Navigate to where you saved the image</li>
-                <li>Run this command:</li>
-            </ol>
-            <pre>steghide extract -sf rootAnony.jpeg</pre>
-            <p><strong>Passphrase when prompted:</strong></p>
-            <div style="background: #330033; padding: 10px; margin: 10px 0;">
-                <code style="color: #ff66ff; font-size: 18px;">RichuLearning2025!</code>
-            </div>
-            <div class="warning">
-                ⚠️ Keep this passphrase secret!
-            </div>
-        </div>
-        
-        <div style="margin-top: 40px; color: #888; font-size: 14px;">
-            <p>If still having issues, the direct image URL is:</p>
-            <input type="text" value="https://rishdin.netlify.app/rootAnony.jpeg" 
-                   id="url-display" readonly 
-                   style="width: 100%; padding: 10px; background: #222; color: lime; border: 1px solid #444; margin: 10px 0;">
-            <button onclick="copyUrl()" class="download-btn" style="padding: 10px 20px; font-size: 16px;">
-                📋 Copy Image URL
-            </button>
-        </div>
+<body style="text-align:center; font-family:Arial; padding:50px;">
+    <h1>🖼️ Download Test</h1>
+    
+    <img src="rootAnony.jpeg" width="400" 
+         style="border:3px solid red; margin:20px; cursor:pointer;"
+         onclick="downloadImage()"
+         title="Click to download">
+    
+    <br><br>
+    
+    <button onclick="downloadImage()" 
+            style="padding:20px 40px; font-size:20px; background:blue; color:white; border:none; border-radius:10px; cursor:pointer;">
+        ⬇️ CLICK TO DOWNLOAD
+    </button>
+    
+    <br><br>
+    
+    <div style="color:red; font-weight:bold; background:#ffe6e6; padding:15px; border-radius:5px; max-width:500px; margin:auto;">
+        ⚠️ Note: When using <code>file://</code> protocol, some browsers:<br>
+        1. May ask where to save<br>
+        2. May save to Desktop instead of Downloads<br>
+        3. May block auto-downloads
     </div>
-
-<script>
-    // Copy URL function
-    function copyUrl() {
-        const url = "https://rishdin.netlify.app/rootAnony.jpeg";
-        navigator.clipboard.writeText(url).then(() => {
-            alert('✅ Image URL copied! Paste it in your browser.');
-        }).catch(() => {
-            const input = document.createElement('input');
-            input.value = url;
-            document.body.appendChild(input);
-            input.select();
-            document.execCommand('copy');
-            document.body.removeChild(input);
-            alert('✅ Image URL copied!');
-        });
-    }
     
-    // Auto-scroll to image
-    window.addEventListener('load', function() {
-        document.getElementById('main-image').scrollIntoView({ behavior: 'smooth' });
-    });
+    <br>
     
-    // If still in iframe after redirect attempt, show special message
-    setTimeout(() => {
-        if (window.self !== window.top) {
-            document.body.innerHTML = `
-            <div style="padding: 50px; text-align: center; color: red;">
-                <h1>⚠️ NETLIFY PREVIEW DETECTED</h1>
-                <p>Downloads are blocked in Netlify's preview iframe.</p>
-                <p>To download the image:</p>
-                <p>
-                    <a href="https://rishdin.netlify.app/rootAnony.jpeg" 
-                       target="_blank" 
-                       style="color: cyan; font-size: 24px; text-decoration: underline;">
-                        CLICK HERE FOR THE IMAGE
-                    </a>
-                </p>
-                <p>Then right-click and "Save image as..."</p>
-                <p style="color: #888; margin-top: 30px;">
-                    Or open your site directly: <br>
-                    <code>https://rishdin.netlify.app</code>
-                </p>
-            </div>`;
-        }
-    }, 1000);
-</script>
+    <div style="color:green; background:#e6ffe6; padding:15px; border-radius:5px; max-width:500px; margin:auto;">
+        ✅ Alternative: Right-click the image above and select<br>
+        <strong>"Save image as..."</strong> → Choose Downloads folder
+    </div>
 </body>
 </html>
