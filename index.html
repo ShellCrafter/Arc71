@@ -325,6 +325,80 @@
     .page.active {
       display: block;
     }
+
+/* 🔥 Enhanced glowing + glitch gate header */
+.gate-glow {
+  font-size: 42px;
+  color: #ff0033;
+  margin-bottom: 20px;
+  text-align: center;
+  letter-spacing: -1px;
+  text-shadow:
+    0 0 10px #ff0033,
+    0 0 20px #ff0033,
+    0 0 30px #ff0033,
+    0 0 40px #ff6666;
+  animation: gate-glow-pulse 2.5s infinite alternate, gate-glitch 2.5s infinite alternate;
+}
+
+@keyframes gate-glow-pulse {
+  0% {
+    text-shadow:
+      0 0 10px #ff0033,
+      0 0 20px #ff0033,
+      0 0 30px #ff0033,
+      0 0 40px #ff6666;
+  }
+  100% {
+    text-shadow:
+      0 0 20px #00ff55,
+      0 0 30px #00ff55,
+      0 0 40px #00ffaa,
+      0 0 60px #00ffaa;
+  }
+}
+
+@keyframes gate-glitch {
+  0% {
+    text-shadow:
+      3px 2px 0 #00ff41,
+      -3px -3px 0 #00f7ff;
+    transform: translate(0);
+  }
+  20% {
+    text-shadow:
+      -3px -2px 0 #00ff41,
+      3px 2px 0 #00f7ff;
+    transform: translate(-3px, 3px);
+  }
+  40% {
+    text-shadow:
+      3px -2px 0 #00ff41,
+      -3px 2px 0 #00f7ff;
+    transform: translate(3px, -3px);
+  }
+  60% {
+    text-shadow:
+      -3px 0 0 #00ff41,
+      3px 0 0 #00f7ff;
+    transform: translate(-3px, 0);
+  }
+  80% {
+    text-shadow:
+      3px 0 0 #00ff41,
+      -3px 0 0 #00f7ff;
+    transform: translate(3px, 0);
+  }
+  100% {
+    text-shadow:
+      0 0 10px #ff0033,
+      0 0 20px #ff0033,
+      0 0 30px #ff0033,
+      0 0 40px #ff6666;
+    transform: translate(0);
+  }
+}
+
   </style>
 </head>
 <body>
@@ -346,14 +420,7 @@
   padding: 20px;
   box-sizing: border-box;
 ">
-  <h1 style="
-    font-size: 42px;
-    color: #ff0040;
-    text-shadow: 0 0 20px #ff0040;
-    margin-bottom: 20px;
-    animation: glitch 1s infinite;
-  ">☠ ACCESS RESTRICTED</h1>
-
+  <h1 class="gate-glow">☠ ACCESS RESTRICTED</h1>
   <div style="
     background: rgba(0, 0, 0, 0.7);
     border: 2px solid #00ffe1;
