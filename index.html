@@ -57,16 +57,16 @@
       text-shadow: 0 0 20px #ff0040;
       animation: glitch 1s infinite;
     }
-    .typing {
-      font-size: 20px;
-      color: #00ffe1;
-      border-right: 2px solid #00ffe1;
-      white-space: nowrap;
-      overflow: hidden;
-      width: 0;
-      animation: typing 5s steps(60, end) forwards, blink 0.75s step-end infinite;
-      margin: 0 auto;
-    }
+.typing {
+  font-size: 20px;
+  color: #00ffe1;
+  border-right: 2px solid #00ffe1;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  margin: 0 auto;
+  /* Animation will be added via JS after gate is cleared */
+}
     .box {
       max-width: 800px;
       margin: 40px auto;
@@ -328,6 +328,185 @@
   </style>
 </head>
 <body>
+
+<!-- ACCESS GATE MODAL -->
+<div id="accessGate" style="
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  color: #00ffe1;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+">
+  <h1 style="
+    font-size: 42px;
+    color: #ff0040;
+    text-shadow: 0 0 20px #ff0040;
+    margin-bottom: 20px;
+    animation: glitch 1s infinite;
+  ">☠ ACCESS RESTRICTED</h1>
+
+  <div style="
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #00ffe1;
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 700px;
+    margin: 20px auto;
+    box-shadow: 0 0 30px rgba(0, 255, 225, 0.3);
+  ">
+    <p style="font-size: 18px; margin: 15px 0; line-height: 1.6; color: #ccffff;">
+      <strong>⚠️ THIS IS A FICTIONAL SIMULATION</strong><br>
+      Arc71 is a <u>dummy educational portal</u> designed for cybersecurity awareness, storytelling, and ethical hacking training.
+    </p>
+    <ul style="text-align: left; margin: 25px 0; line-height: 1.8; color: #ccffff;">
+      <li>✅ No real darknet services are offered or accessible here.</li>
+      <li>✅ No illegal activity is promoted, enabled, or hosted.</li>
+      <li>✅ All content is fictional, satirical, and for educational use only.</li>
+      <li>✅ This site complies with Netlify’s Acceptable Use Policy.</li>
+    </ul>
+
+    <div style="margin: 30px 0; text-align: left;">
+      <label style="display: flex; align-items: flex-start; margin: 15px 0; cursor: pointer;">
+        <input type="checkbox" id="agreeFiction" style="margin-right: 12px; accent-color: #ff0040; width: 18px; height: 18px;">
+        <span>I confirm that I understand <strong>Arc71 is a fictional, non-operational simulation</strong> and not a real dark web service.</span>
+      </label>
+
+      <label style="display: flex; align-items: flex-start; margin: 15px 0; cursor: pointer;">
+        <input type="checkbox" id="agreeEthics" style="margin-right: 12px; accent-color: #ff0040; width: 18px; height: 18px;">
+        <span>I agree to use any educational content responsibly, ethically, and in compliance with all applicable laws.</span>
+      </label>
+    </div>
+
+    <button id="grantAccessBtn" style="
+      background: #ff0040;
+      color: #000;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      box-shadow: 0 0 15px #ff0040;
+      transition: all 0.3s;
+      pointer-events: none;
+      opacity: 0.6;
+    ">[ GRANT ACCESS ]</button>
+  </div>
+
+  <p style="font-size: 14px; color: #666; margin-top: 30px;">
+    System ID: <span style="color: #ff0040;">ARC71-GATE-0x3F</span> | Access log: <span id="accessLog">0 attempts</span>
+  </p>
+</div>
+
+<style>
+  /* Reuse existing glitch animation */
+  @keyframes glitch {
+    0% { text-shadow: 2px 2px #ff0040; }
+    20% { text-shadow: -2px -2px #00ffe1; }
+    40% { text-shadow: 2px -2px #ff0040; }
+    60% { text-shadow: -2px 2px #00ffe1; }
+    80% { text-shadow: 1px -1px #ff0040; }
+    100% { text-shadow: 0 0 20px #ff0040; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const gate = document.getElementById('accessGate');
+    const btn = document.getElementById('grantAccessBtn');
+    const checkbox1 = document.getElementById('agreeFiction');
+    const checkbox2 = document.getElementById('agreeEthics');
+    const logEl = document.getElementById('accessLog');
+
+    // ✅ NEW: Check sessionStorage — gate only once per tab session
+// If gate is skipped, still run typing animation
+if (sessionStorage.getItem('arc71_gate_granted') === 'true') {
+  gate.style.display = 'none';
+  setTimeout(startTypingAnimation, 300); // 👈 ADD THIS
+}
+    let attempts = 0;
+    logEl.textContent = `${attempts} attempts`;
+
+function startTypingAnimation() {
+  const typingEl = document.querySelector('#home .typing');
+  if (typingEl) {
+    // 🔁 Force restart every time
+    typingEl.classList.remove('typing-started');
+    typingEl.style.animation = 'none';
+    typingEl.style.width = '0';
+    void typingEl.offsetWidth; // critical: reset animation state
+    
+    // Apply fresh animation
+    setTimeout(() => {
+      typingEl.style.animation = 'typing 5s steps(60, end) forwards, blink 0.75s step-end infinite';
+      typingEl.classList.add('typing-started');
+    }, 10);
+  }
+}
+
+    const updateButtonState = () => {
+      if (checkbox1.checked && checkbox2.checked) {
+        btn.style.pointerEvents = 'auto';
+        btn.style.opacity = '1';
+        btn.style.background = '#fff';
+        btn.style.color = '#ff0040';
+        btn.style.boxShadow = '0 0 20px #00ffe1';
+      } else {
+        btn.style.pointerEvents = 'none';
+        btn.style.opacity = '0.6';
+        btn.style.background = '#ff0040';
+        btn.style.color = '#000';
+        btn.style.boxShadow = '0 0 15px #ff0040';
+      }
+    };
+
+    checkbox1.addEventListener('change', updateButtonState);
+    checkbox2.addEventListener('change', updateButtonState);
+
+    btn.addEventListener('click', () => {
+      attempts++;
+      logEl.textContent = `${attempts} attempt${attempts !== 1 ? 's' : ''}`;
+
+      if (checkbox1.checked && checkbox2.checked) {
+        // ✅ Save to sessionStorage (not localStorage)
+        sessionStorage.setItem('arc71_gate_granted', 'true');
+
+        gate.style.transition = 'opacity 0.6s';
+        gate.style.opacity = '0';
+        setTimeout(() => {
+          gate.style.display = 'none';
+          startTypingAnimation();
+        }, 600);
+      } else {
+        gate.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+          gate.style.animation = '';
+        }, 500);
+      }
+    });
+
+    // Shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+      }
+    `;
+    document.head.appendChild(style);
+  });
+</script>
  <div class="nav">
     <a href="index.html">Home</a>
     <a href="tools.html">Tools</a>
@@ -572,18 +751,39 @@
     let isPlaying = false;
     
     
-    function showPage(pageId) {
-      // Hide all pages
-      document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-      });
+function showPage(pageId) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.remove('active');
+  });
+  
+  // Show selected page
+  const page = document.getElementById(pageId);
+  page.classList.add('active');
+  
+  // Scroll to top
+  window.scrollTo(0, 0);
+
+  // ✅ FIXED: Only restart typing animation for HOME, and ONLY on its .typing element
+  if (pageId === 'home') {
+    const typingEl = page.querySelector('.typing'); // ← Scoped to #home!
+    if (typingEl) {
+      // 1. Remove animation and reset state
+      typingEl.classList.remove('typing-started');
+      typingEl.style.animation = 'none';
+      typingEl.style.width = '0'; // essential for the 'typing' keyframe to replay
       
-      // Show selected page
-      document.getElementById(pageId).classList.add('active');
-      
-      // Scroll to top
-      window.scrollTo(0, 0);
+      // 2. Trigger reflow to reset animation
+      typingEl.offsetHeight; // forces browser to recalculate layout
+
+      // 3. Restart animation
+      setTimeout(() => {
+        typingEl.style.animation = 'typing 5s steps(60, end) forwards, blink 0.75s step-end infinite';
+        typingEl.classList.add('typing-started');
+      }, 50);
     }
+  }
+}
     
     // Back to top button functionality
     const backToTopButton = document.querySelector('.back-to-top');
@@ -668,6 +868,7 @@
         isPlaying = true;
       }
     }
+
   </script>
 </body>
 </html>
